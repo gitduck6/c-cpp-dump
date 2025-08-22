@@ -14,8 +14,8 @@ int main(int argc,char **argv) {
 
         FILE * fp = fopen(argv[i],"r");
         if (!fp) {
-            fprintf(stderr,"Unable to open the file %s",argv[i]);
-            return 1;
+            //fprintf(stderr,"Unable to open the file %s",argv[i]); // we might not want an error message HERE
+            continue;
         }
 
         for (int c;(c = fgetc(fp)) != EOF;) {
