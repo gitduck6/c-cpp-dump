@@ -19,7 +19,7 @@ int main(int argv, char **argc) {
     #ifdef CLEAR
     FILE * fp1 = fopen("myfile","wb");
     fclose(fp1); 
-    printf("HEY vrooo u used  -DCLEAR :D");
+    printf("HEY vrooo u used  -DCLEAR :D\n");
     #endif
     /* These 3 lines clear the file, i forgot why i made this part :sob:
     this part will only run if you do it with the -DCLEAR option i think (i am NOT checking tho)
@@ -30,12 +30,12 @@ int main(int argv, char **argc) {
     */
 
     if (isSame(argc[1],"clear")) {
-    FILE * fp2 = fopen("myfile","wb");
-    fclose(fp2); 
-    printf("HEY vrooo u used the clear parameter :)");
+        FILE * fp2 = fopen("myfile","wb");
+        fclose(fp2); 
+        printf("HEY vrooo u used the clear parameter :)\n");
     }
 
-
+    printf("Please enter the number of lines\n");
     int height;
     scanf("%d",&height);
 
