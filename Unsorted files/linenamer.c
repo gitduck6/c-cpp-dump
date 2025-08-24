@@ -2,6 +2,19 @@
 #include <string.h>
 /*a program that writes "i am the Nth line" to every line, N being the lines index*/
 
+int isSame(char * str1, char * str2) {
+    int len;
+    if ((len = strlen(str1)) != strlen(str2)) {
+        return 0;
+    }
+    for (int i = 0;i < len;i++){
+        if (str1[i] != str2[i]) {
+            return 0;
+        }
+    }
+    return 1;
+}
+
 int main(int argv, char **argc) {
     #ifdef CLEAR
     FILE * fp1 = fopen("myfile","wb");
@@ -15,6 +28,12 @@ int main(int argv, char **argc) {
     okay it worked, never use it tho pls =(
     okay actually use it, its handy sometimes, would be better if u could to it post compilation
     */
+
+    if (isSame(argc[1],"clear")) {
+    FILE * fp2 = fopen("myfile","wb");
+    fclose(fp2); 
+    printf("HEY vrooo u used the clear parameter :)");
+    }
 
 
     int height;
