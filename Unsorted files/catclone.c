@@ -32,7 +32,9 @@ int main(int argc,char **argv) {
         fgetc gives u the Nth element of a file the Nth time you use it, so essentially the first time u call it u will get the 1st letter,
         the second in the second and so on.
         the contents of the loop is very simple, fputc just prints a char variable to a stream so, the character C goes to standart output.
-        this loop continues untill we have every letter of every file, tho it is a bit slow
+        this loop continues untill we have every letter of every file, tho it is a bit slow.
+
+        PS: i might experiment with a version which prints file by file or something.
         */
 
         fclose(fp);//close each file after the printing
