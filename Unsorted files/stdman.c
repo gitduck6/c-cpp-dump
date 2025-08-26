@@ -2,8 +2,8 @@
 making a student managing tool, using structs. 
 i want this to be a little more long  term than others projects of mine.
 objectives:
-    utilize structs []
-    Student definer []
+    utilize structs [done]
+    Student definer [done]
     student look up []
 maybes:
     save to non voliatile memory []
