@@ -2,13 +2,16 @@
 making a student managing tool, using structs. 
 i want this to be a little more long  term than others projects of mine.
 objectives:
-    utilize structs [done]
+    Utilize structs [done]
     Student definer [done]
-    student look up []
-    update students
+    Student look up [done]
+    Modify student data [done]
+    A full cli app []
 maybes:
     save to non voliatile memory []
     Compare students []
+
+    Notes: damn 130 lines already (90% of them are comments lmao)
 */
 #include <stdio.h>
 #include <stdlib.h>
@@ -26,6 +29,17 @@ struct Student
 
 struct Student * stdlist = NULL;
 int studn = 0;
+
+char *lowCase(char *input) {
+    if (!input) return NULL;
+
+    for (int i = 0;input[i] != '\0';i++) {
+        if ((input[i] <= 'Z') && (input[i] >= 'A')) {
+            input[i]  += 32;
+        }
+    }
+    return input;
+}
 
 void createStud(const char * name,int age,float gpa) {
     studn++;
@@ -69,6 +83,39 @@ void studLookup(int studID) {
     printf("UserID: %d\nName: %s\nAge: %d\nGPA: %.2f\n",studID,currentStud.name,currentStud.age,currentStud.gpa);
 }
 
+void modAttr(char *attr,int studID) {
+    /*ill aim to make thing function into a sort of an attribute modifier hence the name
+    it will take 2 arguments the attribute to modify, and whichever student to modify.
+    */
+    if (studID >= studn) {
+        perror("Student with the ID doesnt exist.\n");
+        return;
+    }
+
+    if (!strcmp(attr,"gpa")) {
+        printf("Please enter the new gpa value:\n");
+        scanf("%f",&stdlist[studID].gpa);
+    }
+    else if (!strcmp(attr,"age")) {
+        printf("Please enter the new age value:\n");
+        scanf("%d",&stdlist[studID].age);
+    }
+    else if (!strcmp(attr,"name")) {
+        printf("Please enter the new name value:\n");
+        fgets(stdlist[studID].name,sizeof(stdlist[studID].name),stdin);       
+        
+        //I dont like how fgets adds a newline at the end of our silly little return value gimme a sec
+
+        size_t len = strlen(stdlist[studID].name);
+        if (stdlist[studID].name[len-1] == '\n') stdlist[studID].name[len-1] = '\0';
+
+        // there we go, later ill try to add something that keeps asking for a value untill it isnt empty or invalid
+        // (giving a character when asking for an intiger for example)
+    }
+    return;
+
+}
+
 int main(int argc, char ** argv) {
     /*struct Student s1;
     scanf("stddef %s %d %f",s1.name,&s1.age,&s1.gpa); - "legacy" code idk :sob:
@@ -76,6 +123,7 @@ int main(int argc, char ** argv) {
     createStud("Red",21,6.7);
     createStud("Jimdy",19,3.5);
     printf("%s is %d years old and his/her gpa is %.2f\n",stdlist[1].name,stdlist[1].age,stdlist[1].gpa);
+    modAttr("name",1);
     //printf("%d",sizeof(struct Student));
     studLookup(1);
     free(stdlist);
