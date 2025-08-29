@@ -64,7 +64,7 @@ void createStud(const char * name,int age,float gpa) {
     return;
 }   
 
-void printInfo(int studID) {
+void studLookup(int studID) {
     struct Student currentStud = stdlist[studID];
     printf("UserID: %d\nName: %s\nAge: %d\nGPA: %.2f\n",studID,currentStud.name,currentStud.age,currentStud.gpa);
 }
@@ -77,7 +77,7 @@ int main(int argc, char ** argv) {
     createStud("Jimdy",19,3.5);
     printf("%s is %d years old and his/her gpa is %.2f\n",stdlist[1].name,stdlist[1].age,stdlist[1].gpa);
     //printf("%d",sizeof(struct Student));
-    printInfo(1);
+    studLookup(1);
     free(stdlist);
     return 0;
 }
