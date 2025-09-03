@@ -22,7 +22,7 @@ int main(int argv, char **argc) {
     printf("HEY vrooo u used  -DCLEAR :D\n");
     #endif
     /* These 3 lines clear the file, i forgot why i made this part :sob:
-    this part will only run if you do it with the -DCLEAR option i think (i am NOT checking tho)
+    this part will only run if you compile it with the -DCLEAR option i think (i am NOT checking tho)
     ok maybe ill check bro if u insist
     i had to use a different var name cos like redefinition wasnt the compilers best recieved thing uhhh
     okay it worked, never use it tho pls =(
