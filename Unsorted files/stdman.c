@@ -40,6 +40,7 @@ char *lowCase(char *input) {
     }
     return input;
 }
+// after commiting i realize now this function was not used i think - 8/29/25
 
 void createStud(const char * name,int age,float gpa) {
     studn++;
@@ -87,6 +88,7 @@ void modAttr(char *attr,int studID) {
     /*ill aim to make thing function into a sort of an attribute modifier hence the name
     it will take 2 arguments the attribute to modify, and whichever student to modify.
     */
+
     if (studID >= studn) {
         perror("Student with the ID doesnt exist.\n");
         return;
@@ -116,16 +118,38 @@ void modAttr(char *attr,int studID) {
 
 }
 
+char **inputParser (char * string){ 
+    char inQuote = 0;
+    char last = 0; // if the last letter was ' ' - space
+    int len = strlen(string);
+    int extraLen = 0;
+
+    for (int i = 0;i < len;i++) {
+        if (string[i] == '"') {
+            inQuote = !inQuote;
+            if (!inQuote) extraLen--;
+        }
+        if (!inQuote) {
+            if (string[i] == ' ') {
+                last = 1;
+                break;
+            }
+            else if (last == 1){
+
+            };
+        }   
+    }
+}//THIS SHIT IS SO FUCKING HARD WTFFFF
+
 int main(int argc, char ** argv) {
-    /*struct Student s1;
-    scanf("stddef %s %d %f",s1.name,&s1.age,&s1.gpa); - "legacy" code idk :sob:
-    */
-    createStud("Red",21,6.7);
-    createStud("Jimdy",19,3.5);
-    printf("%s is %d years old and his/her gpa is %.2f\n",stdlist[1].name,stdlist[1].age,stdlist[1].gpa);
-    modAttr("name",1);
-    //printf("%d",sizeof(struct Student));
-    studLookup(1);
+    int running = 1;
+    char *input = malloc(100);
+    printf("Welcome to student manager.\n");
+    while (running) {
+        printf("> ");
+        
+    }
+
     free(stdlist);
     return 0;
 }
