@@ -2,13 +2,14 @@
 // Basically turns multiple spaces into one
 // such as "Hello    World" turns into "Hello World"
 #include <stdio.h>
+#include <ctype.h>
 
 void cleanPrint(char *string) {
     if (string == NULL) return;
     int last = 0;
 
     for (int i = 0; string[i] != '\0'  ;i++) {
-        if (string[i] == ' ') {
+        if (isspace(string[i])) {
             if (!last) {
             fputc(string[i],stdout);
             }
@@ -23,7 +24,7 @@ void cleanPrint(char *string) {
 }
 
 int main(void) {
-    cleanPrint("    HELLO    GALACTICA  1123   ");
+    cleanPrint("    HELLO       GALACTICA \n 1123   ");
     return 1;
 }
 
