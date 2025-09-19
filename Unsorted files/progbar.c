@@ -30,9 +30,8 @@ void printState(double ratio){
 		else 
 			fputc('-', stdout);
 	}
-	fputc(']',stdout);
-	//fputc('\n', stdout);
-
+	//fputc(']',stdout);
+	printf("] - %.1f %%",ratio * 100);
 }
 
 int main(int argc, char **argv){
