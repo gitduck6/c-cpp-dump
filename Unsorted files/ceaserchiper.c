@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#define MAX_LEN 256
 char *cChiper(char *string, int shiftval) {
     if (string == NULL) {
         perror("string cannot be NULL\n");
@@ -41,15 +42,22 @@ char *cChiper(char *string, int shiftval) {
 
 int main(void) {
     int shiftval;
-    char *string;
+    char *string = malloc(MAX_LEN);
     printf("Please enter a string...\n");
-    scanf("%s",string);
+    //scanf("%s",string);
+    if (fgets(string,MAX_LEN,stdin)) {
+        string[strcspn(string,"\n")] = '\0';
+    }
 
     printf("Please enter the shift value...\n");
     scanf("%d",&shiftval);
 
+    char *chiper = cChiper(string,shiftval);
     printf("The ceaser cipher of your string with %d shift value is\n",shiftval);
-    printf("%s",cChiper(string,shiftval));
+    printf("%s",chiper);
+
+    free(string);
+    free(chiper);
     return 0;
 }
 
@@ -70,4 +78,8 @@ okay so it happend again? but with 410 now
 Okay it seems it happens due to spaces
 but i dont remmember touching spaces in any unusual way
 
+i asked ai, so scanf stops at a space why did i not know that
+also my dumbass didnt initialize string
+
+YESSS I DID IT, i mean WE me and gpt (pls dont kill me in robot revolution)
 */
