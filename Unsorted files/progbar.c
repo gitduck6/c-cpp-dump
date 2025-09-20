@@ -1,6 +1,7 @@
 //progbar.c
 #include <stdio.h>
 #include <stdlib.h>
+
 #if defined(_WIN32) || defined(_WIN64)
 	#include <windows.h> 
 	//time for windows systems
@@ -18,7 +19,9 @@ void portWait(int secs) {
 	sleep(secs);
 	// time for unix systems
 #endif
-	
+// These # conditionals are called "preprocessor directive"
+// Theyre handled durng compilation i think
+// due to this they were not willing to work with variables
 }
 
 void printState(double ratio){
@@ -30,8 +33,8 @@ void printState(double ratio){
 		else 
 			fputc('-', stdout);
 	}
-	//fputc(']',stdout);
 	printf("] - %.1f %%",ratio * 100);
+	// closes the square bracket prints the ratio as a %
 }
 
 int main(int argc, char **argv){
@@ -44,7 +47,6 @@ int main(int argc, char **argv){
 	fflush(stdout);
 
 	while(timer <= dur){
-
 		printState((double)timer/dur);
 		fflush(stdout);
 		portWait(1);
@@ -52,8 +54,13 @@ int main(int argc, char **argv){
 		//fflush(stdout);
 		timer++;
 	}
+	// fflush sends your message directly to the output handle (stdout in this case)
+	// your every print statement, fwrite, or anything alike will keep the message that needs to be printed in a buffer
+	// and this buffer is only "flushed" when theres a newline OR you fflush() it manually
 	printf("Program done running. \n");
 	return 0;
 }
+
+
 //i made this on my phone while we were on w car ride
 //idk i was js bored
