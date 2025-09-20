@@ -70,5 +70,4 @@ okay so it happend again? but with 410 now
 Okay it seems it happens due to spaces
 but i dont remmember touching spaces in any unusual way
 
-okay i asked my friend(chatgpt)
 */
