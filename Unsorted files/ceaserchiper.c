@@ -52,3 +52,23 @@ int main(void) {
     printf("%s",cChiper(string,shiftval));
     return 0;
 }
+
+/*
+NOTES:
+so when i was testing it this happend.
+**
+Please enter a string...
+Hello Chromiumialiatinquajo
+Please enter the shift value...
+The ceaser cipher of your string with 504 shift value is
+Rovvy
+**
+i dont know how that happend tho:sob:
+
+okay so it happend again? but with 410 now
+
+Okay it seems it happens due to spaces
+but i dont remmember touching spaces in any unusual way
+
+okay i asked my friend(chatgpt)
+*/
