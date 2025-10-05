@@ -4,9 +4,9 @@
 // my idea is to make a simple ping pong game if thats what its called;
 
 struct floatVec2 {float x; float y;};
-struct Rect {Vector2 pos;Vector2 size;};
+//struct Rect {Vector2 pos;Vector2 size;};
 
-struct Rect **RectAdresses;
+struct Rectangle **RectAdresses;
 int rectNum = 0;
 
 const int screenWidth = 700;
@@ -16,8 +16,12 @@ bool isCircleColiding(float radius,Vector2 center)
 {
     //if ((center.x < (screenWidth - radius)) && ( center.x > radius ) )
     if ((center.y < (screenHeight - radius)) && ( center.y > radius) ) return 1;
+    for (int i = 0;i < rectNum;i++) {
+        
+    }
     return 0;
 }
+// damn i just found out there was already a rect struct and i made it for no reason :sob:
 
 bool didGoal(Vector2 ballPos) {
     if ((ballPos.x > screenWidth) || ( ballPos.x < 0 ) ) 
@@ -29,17 +33,17 @@ bool didGoal(Vector2 ballPos) {
 
 void mkRect (int topX,int topY,int sizeX,int sizeY) {
     if (!rectNum) {
-        RectAdresses = malloc(sizeof(struct Rect*));
+        RectAdresses = malloc(sizeof(struct Rectangle*));
     }
     else {
-        RectAdresses = realloc(RectAdresses,sizeof(struct Rect*) * (rectNum + 1));
+        RectAdresses = realloc(RectAdresses,sizeof(struct Rectangle *) * (rectNum + 1));
     }
-    RectAdresses[rectNum] = malloc(sizeof(struct Rect));
+    RectAdresses[rectNum] = malloc(sizeof(struct Rectangle));
 
-    RectAdresses[rectNum]->pos.x = topX;
-    RectAdresses[rectNum]->pos.y = topY;
-    RectAdresses[rectNum]->size.x = sizeX;
-    RectAdresses[rectNum]->size.y = sizeY;
+    RectAdresses[rectNum]->x = topX;
+    RectAdresses[rectNum]->y = topY;
+    RectAdresses[rectNum]->width = sizeX;
+    RectAdresses[rectNum]->height = sizeY;
 
     rectNum++;
 }
@@ -47,21 +51,19 @@ int main(void)
 {
     InitWindow(screenWidth, screenHeight, "A test application in raylib");
 
-    struct Rect player;
-
-    player.pos = (Vector2){ (float)screenWidth/15, (float)screenHeight/2 };
-    player.size = (Vector2){10,70};
+    mkRect((float)screenWidth/15, (float)screenHeight/2, 10,70);
 
     Vector2 ballPos = { (float)screenWidth/2, (float)screenHeight/2 };
     struct floatVec2 ballVel = {-1,-10};
     float ballRad = 5.0f;
+    //Rectangle = {};
     
     SetTargetFPS(60);
     
     while (!WindowShouldClose()) 
     {
         // get mouse position
-        player.pos.y = GetMouseY() - (player.size.y / 2);
+        RectAdresses[0]->y = GetMouseY() - (RectAdresses[0]->height / 2);
         
         // calculate ball position
         ballPos.y += (int)ballVel.y;
@@ -84,7 +86,7 @@ int main(void)
         BeginDrawing();
         
         ClearBackground(BLACK);
-        DrawRectangle(player.pos.x, player.pos.y, player.size.x, player.size.y, BLUE);
+        DrawRectangle(RectAdresses[0]->x, RectAdresses[0]->y, RectAdresses[0]->width, RectAdresses[0]->height, BLUE);
         DrawCircle(ballPos.x, ballPos.y, ballRad, RED);
         
         EndDrawing();
