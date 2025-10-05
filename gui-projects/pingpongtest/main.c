@@ -14,12 +14,17 @@ const int screenHeight = 400;
 
 bool isCircleColiding(float radius,Vector2 center) 
 {
-    //if ((center.x < (screenWidth - radius)) && ( center.x > radius ) )
-    if ((center.y < (screenHeight - radius)) && ( center.y > radius) ) return 1;
-    for (int i = 0;i < rectNum;i++) {
-        
+    if ((center.y < (screenHeight - radius)) && ( center.y > radius) ) return false;
+    return true;
+}
+
+bool circTouchingRect(float radius, Vector2 center) {
+        for (int i = 0;i < rectNum;i++) {
+        if (CheckCollisionCircleRec(center,radius,*(RectAdresses[i]))) {
+            return true;
+        }
     }
-    return 0;
+    return false;
 }
 // damn i just found out there was already a rect struct and i made it for no reason :sob:
 
@@ -50,11 +55,12 @@ void mkRect (int topX,int topY,int sizeX,int sizeY) {
 int main(void) 
 {
     InitWindow(screenWidth, screenHeight, "A test application in raylib");
+    bool lastFlip = 0;
 
     mkRect((float)screenWidth/15, (float)screenHeight/2, 10,70);
 
     Vector2 ballPos = { (float)screenWidth/2, (float)screenHeight/2 };
-    struct floatVec2 ballVel = {-1,-10};
+    struct floatVec2 ballVel = {-1,-1};
     float ballRad = 5.0f;
     //Rectangle = {};
     
@@ -68,13 +74,13 @@ int main(void)
         // calculate ball position
         ballPos.y += (int)ballVel.y;
         ballPos.x += (int)ballVel.x;
+
         if (didGoal(ballPos)) {
             ballPos.x = (float)screenWidth/2;
             ballPos.y = (float)screenHeight/2;
         }
         
-        bool lastFlip = 0;
-        if (!isCircleColiding(ballRad,ballPos)) {
+        if (isCircleColiding(ballRad,ballPos)) {
             if (lastFlip)
             ballVel.x = -ballVel.x;
             else
@@ -82,11 +88,25 @@ int main(void)
             
             lastFlip != lastFlip;
         }
+
+        if (circTouchingRect(ballRad,ballPos)) {
+            if (lastFlip)
+            ballVel.x = -ballVel.x;
+            else
+            ballVel.y = -ballVel.y;
+
+            //ballVel.x = -ballVel.x;
+            //ballVel.y = -ballVel.y;
+
+            ballPos.x -= ballVel.x * 5;
+            //ballPos.y += ballVel.y * 5;
+        }
+        printf("%d ",CheckCollisionCircleRec(ballPos,ballRad,*RectAdresses[0]));
         // draw screen
         BeginDrawing();
         
         ClearBackground(BLACK);
-        DrawRectangle(RectAdresses[0]->x, RectAdresses[0]->y, RectAdresses[0]->width, RectAdresses[0]->height, BLUE);
+        DrawRectangle(RectAdresses[0]->x, RectAdresses[0]->y, RectAdresses[0]->width, RectAdresses[0]->height, RAYWHITE);
         DrawCircle(ballPos.x, ballPos.y, ballRad, RED);
         
         EndDrawing();
