@@ -6,21 +6,24 @@
 struct floatVec2 {float x; float y;};
 //struct Rect {Vector2 pos;Vector2 size;};
 
-struct Rectangle **RectAdresses;
+Rectangle **RectAdresses;
 int rectNum = 0;
 
 const int screenWidth = 700;
 const int screenHeight = 400;
 
-bool isCircleColiding(float radius,Vector2 center) 
+bool isCircleColiding(float radius,struct floatVec2 center) 
 {
     if ((center.y < (screenHeight - radius)) && ( center.y > radius) ) return false;
     return true;
 }
 
-bool circTouchingRect(float radius, Vector2 center) {
-        for (int i = 0;i < rectNum;i++) {
-        if (CheckCollisionCircleRec(center,radius,*(RectAdresses[i]))) {
+bool circTouchingRect(float radius, struct floatVec2 center) {
+    int curX = (int)center.x;
+    int curY = (int)center.y;
+    Vector2 cur = {(int)center.x, (int)center.y};
+    for (int i = 0;i < rectNum;i++) {
+        if (CheckCollisionCircleRec(cur,radius,*(RectAdresses[i]))) {
             return true;
         }
     }
@@ -28,7 +31,7 @@ bool circTouchingRect(float radius, Vector2 center) {
 }
 // damn i just found out there was already a rect struct and i made it for no reason :sob:
 
-bool didGoal(Vector2 ballPos) {
+bool didGoal(struct floatVec2 ballPos) {
     if ((ballPos.x > screenWidth) || ( ballPos.x < 0 ) ) 
     {
         return 1;
@@ -38,12 +41,24 @@ bool didGoal(Vector2 ballPos) {
 
 void mkRect (int topX,int topY,int sizeX,int sizeY) {
     if (!rectNum) {
-        RectAdresses = malloc(sizeof(struct Rectangle*));
+        Rectangle **temp = malloc(sizeof(Rectangle*));
+        if (temp == NULL) {
+            fprintf(stderr,"Malloc failed e.1\n");
+            return;
+        }
+        RectAdresses = temp;
     }
     else {
-        RectAdresses = realloc(RectAdresses,sizeof(struct Rectangle *) * (rectNum + 1));
+        Rectangle **temp = realloc(RectAdresses,sizeof(Rectangle *) * (rectNum + 1));
+        if (temp == NULL) {
+            fprintf(stderr,"Malloc failed e.2");
+            return;
+        }
+        RectAdresses = temp;
     }
-    RectAdresses[rectNum] = malloc(sizeof(struct Rectangle));
+    
+    RectAdresses[rectNum] = malloc(sizeof(Rectangle));
+    
 
     RectAdresses[rectNum]->x = topX;
     RectAdresses[rectNum]->y = topY;
@@ -59,8 +74,8 @@ int main(void)
 
     mkRect((float)screenWidth/15, (float)screenHeight/2, 10,70);
 
-    Vector2 ballPos = { (float)screenWidth/2, (float)screenHeight/2 };
-    struct floatVec2 ballVel = {-1,-1};
+    struct floatVec2 ballPos = { (float)screenWidth/2, (float)screenHeight/2 };
+    struct floatVec2 ballVel = {-1,-0.5};
     float ballRad = 5.0f;
     //Rectangle = {};
     
@@ -72,8 +87,8 @@ int main(void)
         RectAdresses[0]->y = GetMouseY() - (RectAdresses[0]->height / 2);
         
         // calculate ball position
-        ballPos.y += (int)ballVel.y;
-        ballPos.x += (int)ballVel.x;
+        ballPos.y += ballVel.y;
+        ballPos.x += ballVel.x;
 
         if (didGoal(ballPos)) {
             ballPos.x = (float)screenWidth/2;
@@ -90,18 +105,9 @@ int main(void)
         }
 
         if (circTouchingRect(ballRad,ballPos)) {
-            if (lastFlip)
-            ballVel.x = -ballVel.x;
-            else
-            ballVel.y = -ballVel.y;
-
-            //ballVel.x = -ballVel.x;
-            //ballVel.y = -ballVel.y;
-
-            ballPos.x -= ballVel.x * 5;
-            //ballPos.y += ballVel.y * 5;
+            
         }
-        printf("%d ",CheckCollisionCircleRec(ballPos,ballRad,*RectAdresses[0]));
+        //printf("%d ",CheckCollisionCircleRec(ballPos,ballRad,*RectAdresses[0]));
         // draw screen
         BeginDrawing();
         
