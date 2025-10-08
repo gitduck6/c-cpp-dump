@@ -101,11 +101,16 @@ int main(void)
             else
             ballVel.y = -ballVel.y;
             
-            lastFlip != lastFlip;
+            lastFlip = !lastFlip;
         }
 
         if (circTouchingRect(ballRad,ballPos)) {
-            
+            if (lastFlip)
+            ballVel.x = -ballVel.x;
+            else
+            ballVel.y = -ballVel.y;
+
+            lastFlip = !lastFlip;
         }
         //printf("%d ",CheckCollisionCircleRec(ballPos,ballRad,*RectAdresses[0]));
         // draw screen
