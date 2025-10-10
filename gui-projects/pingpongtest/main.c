@@ -18,17 +18,6 @@ bool isCircleColiding(float radius,struct floatVec2 center)
     return true;
 }
 
-bool circTouchingRect(float radius, struct floatVec2 center) {
-    int curX = (int)center.x;
-    int curY = (int)center.y;
-    Vector2 cur = {(int)center.x, (int)center.y};
-    for (int i = 0;i < rectNum;i++) {
-        if (CheckCollisionCircleRec(cur,radius,*(RectAdresses[i]))) {
-            return true;
-        }
-    }
-    return false;
-}
 // damn i just found out there was already a rect struct and i made it for no reason :sob:
 
 bool didGoal(struct floatVec2 ballPos) {
@@ -51,7 +40,7 @@ void mkRect (int topX,int topY,int sizeX,int sizeY) {
     else {
         Rectangle **temp = realloc(RectAdresses,sizeof(Rectangle *) * (rectNum + 1));
         if (temp == NULL) {
-            fprintf(stderr,"Malloc failed e.2");
+            fprintf(stderr,"Malloc failed e.2\n");
             return;
         }
         RectAdresses = temp;
@@ -59,13 +48,24 @@ void mkRect (int topX,int topY,int sizeX,int sizeY) {
     
     RectAdresses[rectNum] = malloc(sizeof(Rectangle));
     
-
+    
     RectAdresses[rectNum]->x = topX;
     RectAdresses[rectNum]->y = topY;
     RectAdresses[rectNum]->width = sizeX;
     RectAdresses[rectNum]->height = sizeY;
-
+    
     rectNum++;
+}
+bool circTouchingRect(float radius, struct floatVec2 center) {
+    int curX = (int)center.x;
+    int curY = (int)center.y;
+    Vector2 cur = {(int)center.x, (int)center.y};
+    for (int i = 0;i < rectNum;i++) {
+        if (CheckCollisionCircleRec(cur,radius,*(RectAdresses[i]))) {
+            return true;
+        }
+    }
+    return false;
 }
 int main(void) 
 {
@@ -73,6 +73,9 @@ int main(void)
     bool lastFlip = 0;
 
     mkRect((float)screenWidth/15, (float)screenHeight/2, 10,70);
+    mkRect((float)screenWidth - (float)screenWidth/15, (float)screenHeight/2, 10,70);
+
+    //mkRect((float)screenHeight - (float)screenWidth/15, (float)screenHeight/2, 10,70);
 
     struct floatVec2 ballPos = { (float)screenWidth/2, (float)screenHeight/2 };
     struct floatVec2 ballVel = {-1,-0.5};
@@ -112,12 +115,22 @@ int main(void)
 
             lastFlip = !lastFlip;
         }
-        //printf("%d ",CheckCollisionCircleRec(ballPos,ballRad,*RectAdresses[0]));
+
+        // the enemy ai
+        if (ballPos.y < RectAdresses[1]->y)
+        {
+            RectAdresses[1]->y--;
+        } 
+        else if (ballPos.y > (RectAdresses[1]->y - RectAdresses[1]->height)) {
+            RectAdresses[1]->y++;
+        }
+
         // draw screen
         BeginDrawing();
         
         ClearBackground(BLACK);
         DrawRectangle(RectAdresses[0]->x, RectAdresses[0]->y, RectAdresses[0]->width, RectAdresses[0]->height, RAYWHITE);
+        DrawRectangle(RectAdresses[1]->x, RectAdresses[1]->y, RectAdresses[1]->width, RectAdresses[1]->height, RAYWHITE);
         DrawCircle(ballPos.x, ballPos.y, ballRad, RED);
         
         EndDrawing();
