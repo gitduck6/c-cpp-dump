@@ -12,6 +12,10 @@ int rectNum = 0;
 const int screenWidth = 700;
 const int screenHeight = 400;
 
+float abs_add(float x, float a) {
+    return x += ((x >= 0) ? 1 : -1) * a;
+}
+
 bool isCircleColiding(float radius,struct floatVec2 center) 
 {
     if ((center.y < (screenHeight - radius)) && ( center.y > radius) ) return false;
@@ -74,6 +78,7 @@ int main(void)
 
     mkRect((float)screenWidth/15, (float)screenHeight/2, 10,70);
     mkRect((float)screenWidth - (float)screenWidth/15, (float)screenHeight/2, 10,70);
+    int enemySpeed = 1;
 
     //mkRect((float)screenHeight - (float)screenWidth/15, (float)screenHeight/2, 10,70);
 
@@ -114,15 +119,20 @@ int main(void)
             ballVel.y = -ballVel.y;
 
             lastFlip = !lastFlip;
+            //ballVel.x += 0.5;
+            //ballVel.y += 0.5;
+            ballVel.x = abs_add(ballVel.x,0.5);
+            ballVel.y = abs_add(ballVel.y,0.5);
+
         }
 
         // the enemy ai
         if (ballPos.y < RectAdresses[1]->y)
         {
-            RectAdresses[1]->y--;
+            RectAdresses[1]->y -= enemySpeed;
         } 
         else if (ballPos.y > (RectAdresses[1]->y - RectAdresses[1]->height)) {
-            RectAdresses[1]->y++;
+            RectAdresses[1]->y += enemySpeed;
         }
 
         // draw screen
