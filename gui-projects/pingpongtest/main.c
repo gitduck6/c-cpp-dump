@@ -1,6 +1,11 @@
-#include "raylib.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include "raylib.h"
+
+#define SPEEDLIM 10
+// ANYTHING to use preprocessor definitojns bro:sob:
+
 // my idea is to make a simple ping pong game if thats what its called;
 
 struct floatVec2 {float x; float y;};
@@ -75,6 +80,9 @@ int main(void)
 {
     InitWindow(screenWidth, screenHeight, "A test application in raylib");
     bool lastFlip = 0;
+    int scores[2] = {0};
+    char scoreString[50] =  "The score is 0 : 0";
+    
 
     mkRect((float)screenWidth/15, (float)screenHeight/2, 10,70);
     mkRect((float)screenWidth - (float)screenWidth/15, (float)screenHeight/2, 10,70);
@@ -99,8 +107,18 @@ int main(void)
         ballPos.x += ballVel.x;
 
         if (didGoal(ballPos)) {
+            if (ballPos.x < (screenWidth/2)) {
+                scores[1]++;
+            }
+            else
+            {
+                scores[0]++;
+            }
             ballPos.x = (float)screenWidth/2;
             ballPos.y = (float)screenHeight/2;
+            if (enemySpeed < SPEEDLIM) enemySpeed++;
+            strcpy(scoreString,"");
+
         }
         
         if (isCircleColiding(ballRad,ballPos)) {
@@ -121,8 +139,9 @@ int main(void)
             lastFlip = !lastFlip;
             //ballVel.x += 0.5;
             //ballVel.y += 0.5;
-            ballVel.x = abs_add(ballVel.x,0.5);
-            ballVel.y = abs_add(ballVel.y,0.5);
+            if (ballVel.x < SPEEDLIM) ballVel.x = abs_add(ballVel.x,0.5);
+
+            if (ballVel.y < SPEEDLIM) ballVel.y = abs_add(ballVel.y,0.5);
 
         }
 
@@ -139,8 +158,12 @@ int main(void)
         BeginDrawing();
         
         ClearBackground(BLACK);
+
         DrawRectangle(RectAdresses[0]->x, RectAdresses[0]->y, RectAdresses[0]->width, RectAdresses[0]->height, RAYWHITE);
         DrawRectangle(RectAdresses[1]->x, RectAdresses[1]->y, RectAdresses[1]->width, RectAdresses[1]->height, RAYWHITE);
+
+        DrawText(scoreString,screenWidth/2,20,20,RAYWHITE);
+
         DrawCircle(ballPos.x, ballPos.y, ballRad, RED);
         
         EndDrawing();
