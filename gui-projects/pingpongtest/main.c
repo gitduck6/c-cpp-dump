@@ -3,7 +3,7 @@
 #include <string.h>
 #include "raylib.h"
 
-#define SPEEDLIM 10
+#define SPEEDLIM 5
 // ANYTHING to use preprocessor definitojns bro:sob:
 
 // my idea is to make a simple ping pong game if thats what its called;
@@ -117,7 +117,7 @@ int main(void)
             ballPos.x = (float)screenWidth/2;
             ballPos.y = (float)screenHeight/2;
             if (enemySpeed < SPEEDLIM) enemySpeed++;
-            strcpy(scoreString,"");
+            sprintf(scoreString,"The score is %d : %d",scores[0],scores[1]);
 
         }
         
