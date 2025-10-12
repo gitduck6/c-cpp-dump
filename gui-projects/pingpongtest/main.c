@@ -175,5 +175,5 @@ int main(void)
 /*
     * yeah i give up on this game, possibly will remake it
     *
-    * 
+    * aaaa random change....
 */
