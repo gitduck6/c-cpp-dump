@@ -171,3 +171,9 @@ int main(void)
     CloseWindow();
     return 0;
 }
+
+/*
+    * yeah i give up on this game, possibly will remake it
+    *
+    * 
+*/
