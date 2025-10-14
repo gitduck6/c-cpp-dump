@@ -10,3 +10,6 @@ FLAGS = -I include -L lib -lraylib -lopengl32 -lgdi32 -lwinmm
 test: $(SOURCE)
 	@echo Version: $(SOURCE)
 	$(CC) -o test $(SOURCE) $(FLAGS)
+
+run: test
+	./test
