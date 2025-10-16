@@ -171,23 +171,24 @@ int main(void)
             (CheckCollisionCircleRec(curbal,ball.radius,curRect))
             {   
                 int rectCenterY = curRect.y + (curRect.height/2);
-                float direction = (ball.y - rectCenterY) / 15;
+                float direction = (ball.y - rectCenterY) / 30;
                 ball.yVel = direction;
                 ball.xVel = -ball.xVel;
                 /*
                     * This part is somewhat cryptic, took some time to figure out.
-                    * Basically what it does is, changes the Y velocity of the ball depending on how far from the center the ball is
-                    * 
-                    * 
-                    *
-                    * 
+                    * Basically what it does is,
+                    * changes the Y velocity of the ball depending on how far from the center the ball is
+                    * I got inspired by an arkanoid game in raylibs website
+                    * but made it mostly from memory, so dont expect it to match i guess
+                    * before it i was planning to do some trigonometry magic:sob:
                 */
 
 
             }
         }
-        //test movement
-        Charlist[1].y = GetMouseY();
+        // Temporary movement
+        Charlist[0].y = GetMouseY();
+        // i plan to use arrow keys in this version of the game
 
         //Drawing portion:
         BeginDrawing();
