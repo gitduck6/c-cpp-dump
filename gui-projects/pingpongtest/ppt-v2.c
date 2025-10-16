@@ -4,7 +4,8 @@
 #define GOALPOSTDEPTH 20
 /**\
     * Due to the previous versions suboptimality ive decided to remake it.
-    * And to be honest, i pretty much mixed up so many things i think it would be better off if i remade it.
+    * And to be honest, i pretty much mixed up so many things that
+    *  i think it would be better off if i remade it.
     *
     * 
     * 
@@ -35,7 +36,7 @@ typedef struct Entity
     //Velocity:
 
     //int xVel; # Seemed pretty useless. (for now)
-    //int yVel;
+    int yVel;
 
 
     //Size:
@@ -104,7 +105,7 @@ int main(void)
     Charlist[charAmount - 1].x = screenSize.x / 10;
     Charlist[charAmount - 1].y = (screenSize.y / 2) - (Charlist[charAmount - 1].height / 2);
 
-
+    Charlist[charAmount - 1].yVel = 3;
     /*
     * this is just to reference our entities
     * for example instead of charList[0] we could just go with its name - (*player)
@@ -124,6 +125,8 @@ int main(void)
     Charlist[charAmount - 1].x = (screenSize.x * 9) / 10;
     Charlist[charAmount - 1].y = (screenSize.y / 2) - (Charlist[charAmount - 1].height / 2);
 
+    Charlist[charAmount - 1].yVel = 3;
+
     // this is also just a reference
     Entity *enemy = &Charlist[charAmount - 1];
     Charlist[charAmount - 1].score = 0;
@@ -132,6 +135,28 @@ int main(void)
     //Main loop:
     while (!WindowShouldClose()) 
     {
+        //ENTITY CONTROLS:
+        // The player
+            if (IsKeyDown(KEY_UP) && (Charlist[0].y > 0))
+            {
+                Charlist[0].y -= Charlist[0].yVel;
+                //player->y -= player->yVel;
+            }
+            if (IsKeyDown(KEY_DOWN) && ((Charlist[0].y + Charlist[0].height) < screenSize.y))
+            {
+                Charlist[0].y += Charlist[0].yVel;
+                //player->y += player->yVel;
+                // player didnt work lmao
+            }
+        //The opponent
+            if (ball.xVel >= 0) // ONLY if the ball is heading in the opponents direction
+            {
+                Charlist[1].y += (ball.y > Charlist[1].y) ? Charlist[1].yVel : -Charlist[1].yVel;
+                // this ai is very terrible, i have something better in mind
+
+            }
+        
+
         //Check if ball is in bounds
         if (ball.x + GOALPOSTDEPTH <= 0) 
         {
@@ -149,8 +174,6 @@ int main(void)
             ball.y = screenSize.y / 2;
               
         }
-        // the (2 * ball.radius) portion makes it so it registers as a goal only when the ball is entirely out AND an extra radius size
-        // not just when the radius leaves the bounds
 
         //wall boundaries
         if ((ball.y >= screenSize.y - ball.radius) || (ball.y <= ball.radius)) ball.yVel = -ball.yVel;
@@ -182,13 +205,8 @@ int main(void)
                     * but made it mostly from memory, so dont expect it to match i guess
                     * before it i was planning to do some trigonometry magic:sob:
                 */
-
-
             }
         }
-        // Temporary movement
-        Charlist[0].y = GetMouseY();
-        // i plan to use arrow keys in this version of the game
 
         //Drawing portion:
         BeginDrawing();
