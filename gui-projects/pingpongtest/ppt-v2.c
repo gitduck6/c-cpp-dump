@@ -1,5 +1,7 @@
 #include "raylib.h"
 #include "stdio.h"
+
+#define GOALPOSTDEPTH 20
 /**\
     * Due to the previous versions suboptimality ive decided to remake it.
     * And to be honest, i pretty much mixed up so many things i think it would be better off if i remade it.
@@ -31,8 +33,11 @@ typedef struct Entity
     int x;
     int y;
     //Velocity:
-    int xVel;
-    int yVel;
+
+    //int xVel; # Seemed pretty useless. (for now)
+    //int yVel;
+
+
     //Size:
     int width;
     int height;
@@ -89,7 +94,7 @@ int main(void)
     ball.y = screenSize.y / 2;
     ball.radius = 8; 
     ball.xVel = 1;
-    ball.yVel = 1;
+    ball.yVel = 0;
 
     // The player - [0]
     mkChar();
@@ -99,8 +104,7 @@ int main(void)
     Charlist[charAmount - 1].x = screenSize.x / 10;
     Charlist[charAmount - 1].y = (screenSize.y / 2) - (Charlist[charAmount - 1].height / 2);
 
-    Charlist[charAmount - 1].xVel = 1;
-    Charlist[charAmount - 1].yVel = 1;
+
     /*
     * this is just to reference our entities
     * for example instead of charList[0] we could just go with its name - (*player)
@@ -120,8 +124,6 @@ int main(void)
     Charlist[charAmount - 1].x = (screenSize.x * 9) / 10;
     Charlist[charAmount - 1].y = (screenSize.y / 2) - (Charlist[charAmount - 1].height / 2);
 
-    Charlist[charAmount - 1].xVel = 1;
-    Charlist[charAmount - 1].yVel = 1;
     // this is also just a reference
     Entity *enemy = &Charlist[charAmount - 1];
     Charlist[charAmount - 1].score = 0;
@@ -131,7 +133,7 @@ int main(void)
     while (!WindowShouldClose()) 
     {
         //Check if ball is in bounds
-        if (ball.x + (2 * ball.radius) <= 0) 
+        if (ball.x + GOALPOSTDEPTH <= 0) 
         {
             player->score++;
             //Goto center
@@ -139,7 +141,7 @@ int main(void)
             ball.y = screenSize.y / 2;
 
         }
-        if (ball.x - (2 * ball.radius) >= screenSize.x) 
+        if (ball.x - GOALPOSTDEPTH >= screenSize.x) 
         {
             enemy->score++;
             //Goto center
@@ -159,19 +161,33 @@ int main(void)
         for (int i = 0;i < charAmount;i++) 
         {
             Rectangle curRect;
+            Vector2 curbal = (Vector2){ball.x,ball.y};
             curRect.x = Charlist[i].x;
             curRect.y = Charlist[i].y;
             curRect.width = Charlist[i].width;
             curRect.height = Charlist[i].height;
-            if (CheckCollisionCircleRec(
-            (Vector2){ball.x,ball.y},
-            ball.radius,
-            curRect))
-            {
+            
+            if 
+            (CheckCollisionCircleRec(curbal,ball.radius,curRect))
+            {   
+                int rectCenterY = curRect.y + (curRect.height/2);
+                float direction = (ball.y - rectCenterY) / 15;
+                ball.yVel = direction;
                 ball.xVel = -ball.xVel;
+                /*
+                    * This part is somewhat cryptic, took some time to figure out.
+                    * Basically what it does is, changes the Y velocity of the ball depending on how far from the center the ball is
+                    * 
+                    * 
+                    *
+                    * 
+                */
+
+
             }
         }
-
+        //test movement
+        Charlist[1].y = GetMouseY();
 
         //Drawing portion:
         BeginDrawing();
