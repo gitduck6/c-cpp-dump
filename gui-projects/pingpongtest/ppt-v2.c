@@ -20,6 +20,9 @@
     * 
     *   the code seems to be gotten pretty bad, but atleast better than the last one
     * 
+    *   it is basically playable 
+    *   aside from the fact that i cant score even once, its decent
+    * 
 \**/
 
 Vector2 screenSize = {600,400};
@@ -99,10 +102,13 @@ void drawEntity(Entity entity, Color color)
 
 int main(void) 
 {
+    
     InitWindow(screenSize.x,screenSize.y,"Simple raylib game");
     SetRandomSeed(time(NULL));
     SetTargetFPS(60);
     
+    char scoreString[16] = "0:0";
+
     Ball ball;
     ball.x = screenSize.x / 2;
     ball.y = screenSize.y / 2;
@@ -196,15 +202,16 @@ int main(void)
         //Check if ball is in bounds
         if (ball.x + GOALPOSTDEPTH <= 0) 
         {
-            player->score++;
+            Charlist[0].score++;
             //Goto center
             ball.x = screenSize.x / 2;
             ball.y = screenSize.y / 2;
+            sprintf(scoreString,"%d:%d",Charlist[0].score,Charlist[1].score);
 
         }
         if (ball.x - GOALPOSTDEPTH >= screenSize.x) 
         {
-            enemy->score++;
+            Charlist[1].score++;
             //Goto center
             ball.x = screenSize.x / 2;
             ball.y = screenSize.y / 2;
@@ -260,9 +267,10 @@ int main(void)
         DrawRectangle((screenSize.x / 2) - 50,screenSize.y - 40,100,40,RAYWHITE);
         DrawRectangleLinesEx((Rectangle){(screenSize.x / 2) - 50,screenSize.y - 40,100,40},3,DARKGRAY);
         
+        DrawText(scoreString,(screenSize.x) / 2 - 20,screenSize.y - 30,30,BLACK);
+
         EndDrawing();
     }
     CloseWindow();
     return 0;
-
 }
