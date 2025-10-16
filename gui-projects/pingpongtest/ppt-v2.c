@@ -1,7 +1,9 @@
 #include "raylib.h"
 #include "stdio.h"
+#include "time.h"
 
 #define GOALPOSTDEPTH 20
+#define STARTERSPEED 2
 /**\
     * Due to the previous versions suboptimality ive decided to remake it.
     * And to be honest, i pretty much mixed up so many things that
@@ -15,6 +17,8 @@
     *   and even intuitive once you get used to it
     * 
     *   BTW thanks for creating this great library (if you ever read this)
+    * 
+    *   the code seems to be gotten pretty bad, but atleast better than the last one
     * 
 \**/
 
@@ -96,14 +100,17 @@ void drawEntity(Entity entity, Color color)
 int main(void) 
 {
     InitWindow(screenSize.x,screenSize.y,"Simple raylib game");
+    SetRandomSeed(time(NULL));
     SetTargetFPS(60);
     
     Ball ball;
     ball.x = screenSize.x / 2;
     ball.y = screenSize.y / 2;
     ball.radius = 8; 
-    ball.xVel = 1;
-    ball.yVel = 0;
+    ball.xVel = GetRandomValue(0,1) * STARTERSPEED;
+    if (!ball.xVel) ball.xVel = -1 * STARTERSPEED;
+    // basically my way of making it -1 or 1 idk
+    ball.yVel = (float)GetRandomValue(-10,10) / 5.0f; 
 
     // The player - [0]
     mkChar();
@@ -133,7 +140,7 @@ int main(void)
     Charlist[charAmount - 1].x = (screenSize.x * 9) / 10;
     Charlist[charAmount - 1].y = (screenSize.y / 2) - (Charlist[charAmount - 1].height / 2);
 
-    Charlist[charAmount - 1].yVel = 3;
+    Charlist[charAmount - 1].yVel = 2;
 
     // this is also just a reference
     Entity *enemy = &Charlist[charAmount - 1];
@@ -240,6 +247,7 @@ int main(void)
         BeginDrawing();
 
         ClearBackground((Color){150,150,150,255});
+        
 
         //DrawRectangle();
         DrawCircle(ball.x,ball.y,ball.radius,MAROON);
@@ -249,7 +257,9 @@ int main(void)
         {
             drawEntity(Charlist[i], (Color){60,60,60,255});
         }
-
+        DrawRectangle((screenSize.x / 2) - 50,screenSize.y - 40,100,40,RAYWHITE);
+        DrawRectangleLinesEx((Rectangle){(screenSize.x / 2) - 50,screenSize.y - 40,100,40},3,DARKGRAY);
+        
         EndDrawing();
     }
     CloseWindow();
