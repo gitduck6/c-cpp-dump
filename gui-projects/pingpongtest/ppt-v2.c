@@ -6,9 +6,15 @@
     * Due to the previous versions suboptimality ive decided to remake it.
     * And to be honest, i pretty much mixed up so many things that
     *  i think it would be better off if i remade it.
-    *
     * 
+    * NOTES:
+    *   Okay so there is something i would like to clarify 
+    *   when i say numerically larger i mean that the coordinates are higher in value
+    *   but when i say visually i mean actually whats below and above
+    *   this isnt to blame raylib, this method of defining coordinates is very common
+    *   and even intuitive once you get used to it
     * 
+    *   BTW thanks for creating this great library (if you ever read this)
     * 
 \**/
 
@@ -44,9 +50,11 @@ typedef struct Entity
     int height;
     //Score:
     unsigned short int score;
-    // unsigned short int is basically a 2 byte variable
-    // ill use it since we probaby dont need scores over 2^16 (~65K)
-    // also its unsigned cos we dont rly need negative numbers
+    /*
+        * unsigned short int is basically a 2 byte variable.
+        * I will use it since we probaby dont need scores over 2^16 (~65K).
+        * Also its unsigned since we don't really need negative numbers either.
+    */
 
 } Entity;
 
@@ -151,9 +159,30 @@ int main(void)
         //The opponent
             if (ball.xVel >= 0) // ONLY if the ball is heading in the opponents direction
             {
-                Charlist[1].y += (ball.y > Charlist[1].y) ? Charlist[1].yVel : -Charlist[1].yVel;
-                // this ai is very terrible, i have something better in mind
-
+                /*
+                * this ai is very terrible, i have something better in mind
+                * so the idea is, IF the ball's Y is in the "radius" of (lets say 20)
+                * then you dont need to move,
+                * ELSE go in the direction of the ball's Y (to try to catch it)
+                * Lets try to implement that now
+                */
+                int rectCenter = Charlist[1].y + (Charlist[1].height/2);
+                if (ball.y > (rectCenter + 15)) // if below the range
+                {
+                    Charlist[1].y += Charlist[1].yVel;
+                }
+                if (ball.y < (rectCenter - 15)) // if above the range (i dont even know which to call below or above the range)
+                {
+                    Charlist[1].y -= Charlist[1].yVel;
+                }
+                /*
+                    * OKAY this is much better, tho its different than what i descrbed just a second ago
+                    * What it does is, create a variable called "rect center" which is the center Y of the rect
+                    * and checks if ballY is higher(NUMERICALLY) than the range then numerically go UP
+                    * if its lower do the opposite
+                    * 
+                    *
+                */
             }
         
 
@@ -190,8 +219,7 @@ int main(void)
             curRect.width = Charlist[i].width;
             curRect.height = Charlist[i].height;
             
-            if 
-            (CheckCollisionCircleRec(curbal,ball.radius,curRect))
+            if (CheckCollisionCircleRec(curbal,ball.radius,curRect))
             {   
                 int rectCenterY = curRect.y + (curRect.height/2);
                 float direction = (ball.y - rectCenterY) / 30;
