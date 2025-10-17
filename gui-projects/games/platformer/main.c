@@ -1,3 +1,4 @@
+#include "viewpointdraw.h"
 #include "raylib.h"
 #include "stdio.h"
 
@@ -18,11 +19,13 @@
 
 
 Vector2 screenSize = {600,400};
-Vector2 cameraStart = {0,0};
 
 int main(void)
 {
     InitWindow(screenSize.x,screenSize.y,"A raylib platformer!");
+    SetTargetFPS(60);
+
+    Rectangle square = {100,100,50,50};
 
     while (!WindowShouldClose()) 
     {
@@ -36,6 +39,7 @@ int main(void)
         BeginDrawing();
 
         ClearBackground(RAYWHITE);
+        DrawRectangle(square.x + cameraStart.x,square.y + cameraStart.y,square.width,square.height,RED);
 
         EndDrawing();
     }

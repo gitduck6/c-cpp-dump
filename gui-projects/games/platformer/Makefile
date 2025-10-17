@@ -1,10 +1,10 @@
 CC = gcc
 FLAGS = -I ../include -L ../lib -lraylib -lopengl32 -lgdi32 -lwinmm
-SOURCE = main.c
+SOURCES = main.c viewpointdraw.c
 
-test: $(SOURCE)
-	@echo Source: $(SOURCE)
-	$(CC) -o $@ $(SOURCE) $(FLAGS)
+test: $(SOURCES)
+	@echo SourceS: $(SOURCES)
+	$(CC) -o $@ $(SOURCES) $(FLAGS)
 
 run: test
 	./test
