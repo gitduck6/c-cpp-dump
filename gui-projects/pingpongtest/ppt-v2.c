@@ -23,6 +23,11 @@
     *   it is basically playable 
     *   aside from the fact that i cant score even once, its decent
     * 
+    *   i added sounds today
+    *   i believe this game has nothing left to be added
+    *   even if the collisions are really terrible, i need something new
+    *   so goodbye my dear friend :c
+    * 
 \**/
 
 Vector2 screenSize = {600,400};
@@ -104,9 +109,11 @@ int main(void)
 {
     
     InitWindow(screenSize.x,screenSize.y,"Simple raylib game");
+    InitAudioDevice();
     SetRandomSeed(time(NULL));
     SetTargetFPS(60);
-    
+
+    Sound ballTap = LoadSound("balltap.wav");
     char scoreString[16] = "0:0";
 
     Ball ball;
@@ -239,6 +246,9 @@ int main(void)
                 float direction = (ball.y - rectCenterY) / 30;
                 ball.yVel = direction;
                 ball.xVel = -ball.xVel;
+
+                PlaySound(ballTap);
+                printf("%zu",sizeof(Sound));
                 /*
                     * This part is somewhat cryptic, took some time to figure out.
                     * Basically what it does is,
