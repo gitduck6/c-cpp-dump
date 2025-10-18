@@ -1,7 +1,10 @@
 #include "viewpointdraw.h"
 #include "raylib.h"
+#include "stdio.h"
 
 Vector2 cameraStart = {0,0};
+Gline *gLines = NULL;
+int gLineCount = 0;
 
 void vdrawRect(Rectangle rect,Color color)
 {
@@ -36,4 +39,22 @@ Vector2 posToVpos(Vector2 pos)
 Vector2 VposTopos(Vector2 vpos)
 {
     return (Vector2){vpos.x + cameraStart.x,vpos.y + cameraStart.y};
+}
+
+int MkGline(char direction,int index)
+{
+    if (gLineCount <= 0)
+    {
+        gLines = MemAlloc(sizeof(Gline) * (gLineCount + 1));
+    }
+    else
+    {
+        gLines = MemRealloc(gLines,sizeof(Gline) * (gLineCount + 1));
+    }
+    gLines[gLineCount].direction = direction;
+    gLines[gLineCount].index = index;
+
+
+    gLineCount++;
+    return gLineCount;
 }

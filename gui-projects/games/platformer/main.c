@@ -24,6 +24,21 @@
     * 
     * So the first step will be adding a line generator, similar to minecraft
     * how it generates only whats in your field of view (FOV) or our window
+    * 
+    * Time to think:
+    * a global struct array containing the direction and the index of every line
+    * Visual analogy:
+    *      | <- This would be topside 1
+    *   ---+-- <- these would be forward 1 and 2
+    *      |
+    *      | <- This would be bottomside 2
+    *      | <- This would be bottomside 3
+    * and so on, i hope that made sense
+    * BTW each x line will be screenSize.x long
+    * and each y line screenSize.y long
+    * 
+    * generate each one we see, ungenerate them when we lose sight of them
+    * ima call them Glines, partially because thats all i can think of and because
 */
 
 Vector2 screenSize = {600,400};
@@ -33,7 +48,9 @@ int main(void)
     InitWindow(screenSize.x,screenSize.y,"A raylib platformer!");
     SetTargetFPS(60);
 
-    Rectangle square1 = {100,100,50,50};    
+    Rectangle square1 = {100,100,50,50};   
+    
+    MkGline(1,1);
 
     while (!WindowShouldClose()) 
     {
