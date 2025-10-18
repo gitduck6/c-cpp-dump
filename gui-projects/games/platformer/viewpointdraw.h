@@ -1,7 +1,7 @@
 #pragma once
 // This is basically a header guard
 // stops a header from being included multiple times
-// to avoid "redefenition" errors
+// to avoid "redefenition errors"
 
 #include "raylib.h"
 
@@ -21,6 +21,7 @@ extern Vector2 cameraStart;
 
 void vdrawRect(Rectangle rect,Color color);
 void vdrawCircle(Vector2 pos,float radius,Color color);
+void vdrawLine(Vector2 start,Vector2 end,int thick, Color color);
 Vector2 posToVpos(Vector2 pos);
 Vector2 VposTopos(Vector2 vpos);
 

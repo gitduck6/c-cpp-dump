@@ -4,6 +4,10 @@
 
 #define TILESIZE 50
 /*
+    * Also why not call this big guy a DOCBOARD
+    * a Board for the "documentation"
+    * in reality its just me going insane
+    * 
     * Hello, in this project I will try to make a platformer game.
     * For now, my main goal is to implement "Camera movements."
     * At first, it might seem that our window is our canvas, but I want to turn it into just a point of view.
@@ -17,6 +21,9 @@
     *
     * now that the basic algorithm is present, i need to immitate camera movement a little better
     * Namely by adding a gridlike background
+    * 
+    * So the first step will be adding a line generator, similar to minecraft
+    * how it generates only whats in your field of view (FOV) or our window
 */
 
 Vector2 screenSize = {600,400};
@@ -26,7 +33,7 @@ int main(void)
     InitWindow(screenSize.x,screenSize.y,"A raylib platformer!");
     SetTargetFPS(60);
 
-    Rectangle square1 = {100,100,50,50};
+    Rectangle square1 = {100,100,50,50};    
 
     while (!WindowShouldClose()) 
     {
@@ -41,8 +48,8 @@ int main(void)
         ClearBackground(RAYWHITE);
         vdrawRect(square1,RED);
         vdrawCircle((Vector2){30,30},20,GRAY);
+        vdrawLine((Vector2){0,0},(Vector2){screenSize.x,0},3,BLACK);
 
         EndDrawing();
-    }
-    
+    }   
 }
