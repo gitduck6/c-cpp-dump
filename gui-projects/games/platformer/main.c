@@ -3,6 +3,7 @@
 #include "stdio.h"
 
 #define TILESIZE 50
+#define LINEWIDTH 3
 /*
     * Also why not call this big guy a DOCBOARD
     * a Board for the "documentation"
@@ -28,14 +29,15 @@
     * Time to think:
     * a global struct array containing the direction and the index of every line
     * Visual analogy:
-    *      | <- This would be topside 1
-    *   ---+-- <- these would be forward 1 and 2
+    *      | <- This would be topside 0
+    *   ---+-- <- these would be forward 0 and 1
     *      |
+    *      | <- This would be bottomside 1
     *      | <- This would be bottomside 2
-    *      | <- This would be bottomside 3
     * and so on, i hope that made sense
     * BTW each x line will be screenSize.x long
     * and each y line screenSize.y long
+    * We should start counting from 0
     * 
     * generate each one we see, ungenerate them when we lose sight of them
     * ima call them Glines, partially because thats all i can think of and because
@@ -50,7 +52,7 @@ int main(void)
 
     Rectangle square1 = {100,100,50,50};   
     
-    MkGline(1,1);
+    MkGline(1,0);
 
     while (!WindowShouldClose()) 
     {
@@ -62,11 +64,54 @@ int main(void)
 
         BeginDrawing();
 
+        //Draw Glines
+        for (int i = 0;i < gLineCount;i++)
+        {
+            Vector2 start = {0};
+            Vector2 end = {0};
+            switch (gLines[i].direction % 4)
+            {
+            case 0: //EAST
+                start.x = gLines[i].index * screenSize.x;
+                start.y = 0;
+                end.x = (gLines[i].index + 1) * screenSize.x;
+                end.y = 0;
+                break;
+            case 1: //NORTH
+                start.x = 0;
+                start.y = -gLines[i].index * screenSize.y;
+                end.x = 0;
+                end.y = -(gLines[i].index + 1) * screenSize.y;
+                break;
+            case 2: //WEST
+                start.x = -gLines[i].index * screenSize.x;
+                start.y = 0;
+                end.x = -(gLines[i].index + 1) * screenSize.x;
+                end.y = 0;
+        
+                break;
+            case 3: //SOUTH
+                start.x = 0;
+                start.y = gLines[i].index * screenSize.y;
+                end.x = 0;
+                end.y = (gLines[i].index + 1) * screenSize.y;
+        
+                break;
+            default:
+                fprintf(stderr,"BOOOM!!!! that should NOT have happend, goodbye World\n");
+                CloseWindow();
+                break;
+            }
+            vdrawLine(start,end,3,BLACK);
+        }
+
         ClearBackground(RAYWHITE);
         vdrawRect(square1,RED);
         vdrawCircle((Vector2){30,30},20,GRAY);
-        vdrawLine((Vector2){0,0},(Vector2){screenSize.x,0},3,BLACK);
+        //vdrawLine((Vector2){0,0},(Vector2){screenSize.x,0},3,BLACK);
 
         EndDrawing();
     }   
+    CloseWindow();
+    return 0;
 }

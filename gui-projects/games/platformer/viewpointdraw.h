@@ -23,7 +23,8 @@ typedef struct Gline
 }
 Gline;
 
-
+extern Gline *gLines;
+extern int gLineCount;
 extern Vector2 cameraStart;
 // extern is basically a promise that a variable exists apparently
 // the compiler doesnt allocate space for it
@@ -35,7 +36,6 @@ void vdrawLine(Vector2 start,Vector2 end,int thick, Color color);
 Vector2 posToVpos(Vector2 pos);
 Vector2 VposTopos(Vector2 vpos);
 int MkGline(char direction,int index);
-
 
 
 
