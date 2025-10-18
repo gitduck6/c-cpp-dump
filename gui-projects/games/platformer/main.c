@@ -15,8 +15,9 @@
     * also i might add a little character and obstacles.
     * Now i better get to work.
     *
+    * now that the basic algorithm is present, i need to immitate camera movement a little better
+    * Namely by adding a gridlike background
 */
-
 
 Vector2 screenSize = {600,400};
 
@@ -25,21 +26,21 @@ int main(void)
     InitWindow(screenSize.x,screenSize.y,"A raylib platformer!");
     SetTargetFPS(60);
 
-    Rectangle square = {100,100,50,50};
+    Rectangle square1 = {100,100,50,50};
 
     while (!WindowShouldClose()) 
     {
+        //Camera movements
         if (IsKeyDown(KEY_UP)) cameraStart.y++;
         if (IsKeyDown(KEY_DOWN)) cameraStart.y--;
         if (IsKeyDown(KEY_LEFT)) cameraStart.x++;
         if (IsKeyDown(KEY_RIGHT)) cameraStart.x--;
 
-
-
         BeginDrawing();
 
         ClearBackground(RAYWHITE);
-        DrawRectangle(square.x + cameraStart.x,square.y + cameraStart.y,square.width,square.height,RED);
+        vdrawRect(square1,RED);
+        vdrawCircle((Vector2){30,30},20,GRAY);
 
         EndDrawing();
     }
