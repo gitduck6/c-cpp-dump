@@ -67,11 +67,53 @@ int main(void)
 
     while (!WindowShouldClose()) 
     {
+        bool didMove = 0; // if you moved in this frame
         //Camera movements
-        if (IsKeyDown(KEY_UP)) cameraStart.y += CAMERASPEED;
-        if (IsKeyDown(KEY_DOWN)) cameraStart.y -= CAMERASPEED;
-        if (IsKeyDown(KEY_LEFT)) cameraStart.x += CAMERASPEED;
-        if (IsKeyDown(KEY_RIGHT)) cameraStart.x -= CAMERASPEED;
+        if (IsKeyDown(KEY_UP))
+        {
+            cameraStart.y += CAMERASPEED;
+            didMove = true;
+        } 
+        if (IsKeyDown(KEY_DOWN))
+        {
+            cameraStart.y -= CAMERASPEED;
+            didMove = true;
+        }
+        if (IsKeyDown(KEY_LEFT)) 
+        {
+            cameraStart.x += CAMERASPEED;
+            didMove = true;
+        }
+        if (IsKeyDown(KEY_RIGHT)) 
+        {
+            cameraStart.x -= CAMERASPEED;
+            didMove = true;
+        }
+
+        //Generate Glines
+        if (didMove) 
+        {
+            int Xglines = (cameraStart.x / screenSize.x) + 1;
+            int Yglines = (cameraStart.x / screenSize.x) + 1;
+            if (Xglines <= 0)
+            {
+                for (int i = 0;i < -Xglines; i++)
+                {
+                    if (!doesGlineExist(0,i)) MkGline(0,i);
+                    
+                }
+                printf("inloop 1 wiith %d\n",Xglines);
+            }
+            else 
+            {
+                for (int i = 0;i < Xglines; i++)
+                {
+                    if (!doesGlineExist(2,i)) MkGline(2,i);
+                    printf("wastrue");
+                }
+                printf("inloop 2 with %d\n",Xglines);
+            }
+        }
 
         BeginDrawing();
 

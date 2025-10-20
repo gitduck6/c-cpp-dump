@@ -44,28 +44,13 @@ Vector2 VposTopos(Vector2 vpos)
 
 int MkGline(char direction,int index)
 {
-    void *temp = NULL;
     if (gLineCount <= 0)
     {
-        temp = MemAlloc(sizeof(Gline) * (gLineCount + 1));
-        if (temp = NULL)
-        {
-            fprintf(stderr,"Malloc failed");
-            return 0;
-        }
-        gLines = temp;
-
+        gLines = MemAlloc(sizeof(Gline) * (gLineCount + 1));
     }
     else
     {
-        temp = MemRealloc(gLines,sizeof(Gline) * (gLineCount + 1));
-        if (temp = NULL)
-        {
-            fprintf(stderr,"Malloc failed");
-            return 0;
-        }
-        gLines = temp;
-
+        gLines = MemRealloc(gLines,sizeof(Gline) * (gLineCount + 1));
     }
     gLines[gLineCount].direction = direction;
     gLines[gLineCount].index = index;
@@ -85,4 +70,5 @@ bool doesGlineExist(char direction,int index)
     }
     return 0;
 }
+
 
