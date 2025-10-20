@@ -3,8 +3,8 @@
 #include "stdio.h"
 
 #define FONTMIDDLE 25
-#define TILESIZE 50
 #define LINEWIDTH 3
+#define CAMERASPEED 3
 /*
     * Also why not call this big guy a DOCBOARD
     * a Board for the "documentation"
@@ -42,6 +42,8 @@
     * 
     * generate each one we see, ungenerate them when we lose sight of them
     * ima call them Glines, partially because thats all i can think of and because
+    * 
+    * I believe we now need to generate these lines indefinitly
 */
 
 Vector2 screenSize = {600,400};
@@ -51,17 +53,25 @@ int main(void)
     InitWindow(screenSize.x,screenSize.y,"A raylib platformer!");
     SetTargetFPS(60);
 
+    cameraStart.x = screenSize.x / 2;
+    cameraStart.y = screenSize.y / 2;
+
+
     Rectangle square1 = {100,100,50,50};   
     
+    MkGline(0,0);
     MkGline(1,0);
+    MkGline(2,0);
+    MkGline(3,0);
+
 
     while (!WindowShouldClose()) 
     {
         //Camera movements
-        if (IsKeyDown(KEY_UP)) cameraStart.y++;
-        if (IsKeyDown(KEY_DOWN)) cameraStart.y--;
-        if (IsKeyDown(KEY_LEFT)) cameraStart.x++;
-        if (IsKeyDown(KEY_RIGHT)) cameraStart.x--;
+        if (IsKeyDown(KEY_UP)) cameraStart.y += CAMERASPEED;
+        if (IsKeyDown(KEY_DOWN)) cameraStart.y -= CAMERASPEED;
+        if (IsKeyDown(KEY_LEFT)) cameraStart.x += CAMERASPEED;
+        if (IsKeyDown(KEY_RIGHT)) cameraStart.x -= CAMERASPEED;
 
         BeginDrawing();
 
@@ -112,7 +122,6 @@ int main(void)
         ClearBackground(RAYWHITE);
         vdrawRect(square1,RED);
         vdrawCircle((Vector2){30,30},20,GRAY);
-        //vdrawLine((Vector2){0,0},(Vector2){screenSize.x,0},3,BLACK);
 
         EndDrawing();
     }   

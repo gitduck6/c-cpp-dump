@@ -3,6 +3,7 @@
 #include "stdio.h"
 
 Vector2 cameraStart = {0,0};
+
 Gline *gLines = NULL;
 int gLineCount = 0;
 
@@ -43,18 +44,45 @@ Vector2 VposTopos(Vector2 vpos)
 
 int MkGline(char direction,int index)
 {
+    void *temp = NULL;
     if (gLineCount <= 0)
     {
-        gLines = MemAlloc(sizeof(Gline) * (gLineCount + 1));
+        temp = MemAlloc(sizeof(Gline) * (gLineCount + 1));
+        if (temp = NULL)
+        {
+            fprintf(stderr,"Malloc failed");
+            return 0;
+        }
+        gLines = temp;
+
     }
     else
     {
-        gLines = MemRealloc(gLines,sizeof(Gline) * (gLineCount + 1));
+        temp = MemRealloc(gLines,sizeof(Gline) * (gLineCount + 1));
+        if (temp = NULL)
+        {
+            fprintf(stderr,"Malloc failed");
+            return 0;
+        }
+        gLines = temp;
+
     }
     gLines[gLineCount].direction = direction;
     gLines[gLineCount].index = index;
 
-
     gLineCount++;
     return gLineCount;
 }
+
+bool doesGlineExist(char direction,int index)
+{
+    for (int i = 0;gLineCount;i++)
+    {
+        if ((gLines[i].direction == direction) && (gLines[i].index == index))
+        {
+            return 1;
+        }
+    }
+    return 0;
+}
+
