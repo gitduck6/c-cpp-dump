@@ -72,7 +72,6 @@ void clearFile(const char * filename)
 {
     FILE * ftc = fopen(filename,"w");
     fclose(ftc);
-
 }
 
 void saveToFile(const char* filename)
@@ -98,6 +97,7 @@ void loadFromFile(const char* filename)
 
     while(fgets(buffer,sizeof(buffer),fp) != NULL)
     {
+        buffer[strcspn(buffer,"\n")] = '\0';
         mkStr(buffer);
     }
 }
