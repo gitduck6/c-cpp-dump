@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#define INITIALSIZE 256
 
 /*
     * yet another mini project that seemed interesting
@@ -10,19 +11,34 @@
     * 
 */
 
+typedef struct buffer
+{
+    char *string;
+    int size;
+} 
+Buffer;
+
+void InitBuffer(Buffer *buffer)
+{
+    buffer->string = malloc(sizeof(char) * INITIALSIZE);
+    buffer->size = INITIALSIZE;
+}
+
 int main(void)
 {
-    char buffer[256] = {0};
+
+    Buffer inbuffer;
+    InitBuffer(&inbuffer);
     char running = 1;
 
     while (running) {
         printf("mysh>>");
         fflush(stdout);
-        fgets(buffer,sizeof(buffer),stdin);
+        fgets(inbuffer.string,inbuffer.size,stdin);
 
-        if (!strcmp(buffer,"exit\n")) break;
+        if (!strcmp(inbuffer.string,"exit\n")) break;
 
-        system(buffer);
+        system(inbuffer.string);
     }
     return EXIT_SUCCESS;
 }
