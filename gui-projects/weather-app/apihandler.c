@@ -1,6 +1,7 @@
 #include "curl/curl.h"
 #include "string.h"
 #include "cJSON.h"
+#include "apihandler.h"
 
 /*
     * This is the first part of the weather app i decided to code
@@ -8,6 +9,8 @@
     * (WE failing in life with this one)
     *  
 */
+
+static Cord location;
 
 size_t write_callback(void *contents,size_t size, size_t nmemb,void *UNUSED)
 {
@@ -37,17 +40,20 @@ size_t write_callback(void *contents,size_t size, size_t nmemb,void *UNUSED)
     if (cJSON_IsNumber(lon) && cJSON_IsNumber(lat))
     {
         printf("%f %f\n",lat->valuedouble,lon->valuedouble);
+        location.lat = (float)lat->valuedouble;
+        location.lon = (float)lon->valuedouble;
+
     }
     cJSON_Delete(root);
     return size * nmemb;
 }
 
-void cityToCord(char *city)
+Cord cityToCord(char *city)
 {
     if (city == NULL) 
     {
         fprintf(stderr,"City must be a cstring\n");
-        return;
+        return (Cord){0,0};
     }
 
     int urlSize = 150;
@@ -78,17 +84,23 @@ void cityToCord(char *city)
         if (res != CURLE_OK)
         {
             fprintf(stderr,"Curl failed : %s\n",curl_easy_strerror(res));
+            curl_easy_cleanup(curl);
+            return (Cord){0,0};
+
         }
         curl_easy_cleanup(curl);
     }
     curl_global_cleanup();
-    return;
+    return (Cord){0,0};
 
 }
 
+
+
 int main(void)
 {
-    printf("Hello world\n");
+    
     cityToCord("Berlin");
+    printf("LATITUDE IS %f %f\n",location.lat,location.lon);
     return 0;
 }
