@@ -2,11 +2,11 @@
 
 # Compiler and flags
 CC := gcc
-CFLAGS := -Icurl/include
-LDFLAGS := -Lcurl/lib -lcurl -lssl -lcrypto -lws2_32 -lwldap32
+CFLAGS := -Icurl/include -I../games/include
+LDFLAGS := -Lcurl/lib -L../games/lib -lcurl -lssl -lcrypto -lws2_32 -lwldap32 -lraylib -lopengl32 -lgdi32 -lwinmm
 
 # Sources, objects, and target
-SOURCES := apihandler.c cJSON.c
+SOURCES := apihandler.c cJSON.c gui.c
 OBJECTS := $(SOURCES:.c=.o)
 TARGET := api-app
 

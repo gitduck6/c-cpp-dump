@@ -55,4 +55,8 @@ dkms.conf
 *.dwo
 
 # api key's file (i think it is good to keep it secret ig?)
-*API*
+
+#External libraries that i dont think need to be included
+curl/
+cJSON.c
+cJSON.h
