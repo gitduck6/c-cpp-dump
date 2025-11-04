@@ -8,6 +8,9 @@
     * i have a simple algorithm in mind, read line by line and turn it into system("command")'s 
     * or something along those lines 
     * 
+    * So my output isnt exactly how i want it, but this is only a windows issue
+    * newlines in windows are actually /r/n, since im modifying them in binary mode
+    * just removing the "b" from fopen was apparently sufficient
 */
 
 char *readLn(FILE *fHandle)
@@ -62,8 +65,8 @@ int main(int argc, char **argv)
     fclose(clearoutHandle);
 
 
-    FILE *inputHandle = fopen(input,"rb");
-    FILE *outputHandle = fopen(output,"ab");
+    FILE *inputHandle = fopen(input,"r");
+    FILE *outputHandle = fopen(output,"a");
     
     fprintf(outputHandle,"#include <stdlib.h>\n\n");
     fprintf(outputHandle,"int main(void){\n");
