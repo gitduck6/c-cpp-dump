@@ -9,8 +9,16 @@
     * or something along those lines 
     * 
     * So my output isnt exactly how i want it, but this is only a windows issue
-    * newlines in windows are actually /r/n, since im modifying them in binary mode
+    * newlines in windows are actually \r\n, since im modifying them in binary mode
     * just removing the "b" from fopen was apparently sufficient
+    * 
+    * Rightnow what the program needs is sanitization, since adding quotes might lead to our string ending early
+    * it can cause issues in our destination code, however i see a simple solution to this
+    * which is to add a reverseSlash-'\' before every double quote, 
+    * while also handling the extra space it might need in the buffer
+    * 
+    * Okay this version just replaces double quotes with single quotes, which can be "undefined behaviour"
+    * since replacing them with double quotes caused for it to be added infinetly
 */
 
 char *readLn(FILE *fHandle)
@@ -28,8 +36,14 @@ char *readLn(FILE *fHandle)
 
     while ( ((ch = fgetc(fHandle)) != EOF ) && (ch != '\n') )
     {
+        if (ch == '"')
+        {
+            ch = '/';
+            ungetc('\'',fHandle);
+        }
         buffer[len] = ch;
         len++;
+        
         if (size <= len)
         {
             size *= 2;
@@ -42,7 +56,6 @@ char *readLn(FILE *fHandle)
 
     return buffer;
 }
-
 
 int main(int argc, char **argv)
 {
