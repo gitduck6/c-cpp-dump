@@ -24,6 +24,8 @@
 char *readLn(FILE *fHandle)
 {
     char ch = fgetc(fHandle);
+    char last = 0;
+
 
     if (ch == EOF) return NULL;
     ungetc(ch,fHandle);
@@ -36,12 +38,12 @@ char *readLn(FILE *fHandle)
 
     while ( ((ch = fgetc(fHandle)) != EOF ) && (ch != '\n') )
     {
-        if (ch == '"')
+        if ((ch == '"') && (last != '\\'))
         {
-            ch = '/';
-            ungetc('\'',fHandle);
+            ch = '\\';
+            ungetc('\"',fHandle);
         }
-        buffer[len] = ch;
+        last = buffer[len] = ch;
         len++;
         
         if (size <= len)
