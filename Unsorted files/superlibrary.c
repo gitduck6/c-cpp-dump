@@ -4,6 +4,10 @@
 /*
     * in this code, as u can see im not using any malloc, pretty much replacing it with realloc
     * this seems to have no difference from the typicall "malloc block"
+    * 
+    * Okay i will try to document the windows terminal clearer now,
+    * this is actually similar to the termios thing
+    * probably another "C tradition"
     *
 */
 #if defined(_WIN32)
@@ -30,23 +34,36 @@ char getch(void)
 void clearConsole(void)
 {
     #if defined(_WIN32)
-    HANDLE hConsole = GetStdHandle(STD_INPUT_HANDLE);
-    CONSOLE_SCREEN_BUFFER_INFO csbi;
-    DWORD count;
-    DWORD cellCount;
-    COORD homeCoords = {0,0};
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE); // Get the handle thing so we can work with the terminal
+    // OKAY IT WASNT right to use input here
+    CONSOLE_SCREEN_BUFFER_INFO csbi; // we will store the info here
+    DWORD count; // DWORD is an unsigned int used in windows, similar to size_t i believe
+    DWORD cellCount; 
+    COORD homeCoords = {0,0}; // a coordinate struct, similar to Vector2 from raylib
 
-    if (hConsole == INVALID_HANDLE_VALUE) return;
+    if (hConsole == INVALID_HANDLE_VALUE) 
+    {
+        fprintf(stderr,"Failed to get console info.\n");
+        return;
+    } 
 
-    if (!GetConsoleScreenBufferInfo(hConsole, &csbi)) return;
+    if (!GetConsoleScreenBufferInfo(hConsole, &csbi)) // get the CSBI of the console handle and keep it at csbi's adress
+    {
+        fprintf(stderr,"Failed to get console info.\n");
+        return;
+    }
     cellCount = csbi.dwSize.X * csbi.dwSize.Y;
 
-    FillConsoleOutputCharacter(hConsole, (TCHAR) ' ', cellCount, homeCoords, &count);
+    FillConsoleOutputCharacter(hConsole, (TCHAR) ' ', cellCount, homeCoords, &count); 
+    // fills the hConsole with ' 'spaces, CELLCOUNT times starting from homeCord and stores the amount of
+    // characters actually written in count
     FillConsoleOutputAttribute(hConsole, csbi.wAttributes, cellCount, homeCoords, &count);
-    SetConsoleCursorPosition(hConsole, homeCoords);
+    // this line i believe sets the previous attributes back, tho i dont remmemmber changing it
+    // so its kinda confusing for me
+    SetConsoleCursorPosition(hConsole, homeCoords);// and finallymoves the cursor back
 
     #elif !defined(_WIN32)
-    printf("\033[2J\033[H");
+    printf("\033[2J\033[H");// if we are'nt in windows use ansi escape codes
     #endif
 }
 
@@ -70,6 +87,7 @@ void AddBook(char * title)
     library = temp;
 
     library[libLen].title = title;
+    library[libLen + 1].title = NULL;
     libLen++;
 }
 
