@@ -31,6 +31,38 @@ char getch(void)
 }
 #endif
 
+char *getStr(FILE* fHandle)
+{
+    size_t size = 16;
+    size_t len = 0;
+    char *str = malloc(sizeof(char) * size);
+    if (str == NULL)
+    {
+        fprintf(stderr,"Malloc fail\n");
+        return NULL;
+    }
+
+    char character;
+    while ( (character = fgetc(fHandle) != '\n') && (character != EOF) )
+    {
+        str[len] = character;
+        len++;
+        if (size <= len)
+        {
+            size *= 2;
+            char *temp = realloc(str,size);
+            if (temp == NULL) 
+            {
+                fprintf(stderr,"Realloc fail\n");
+                return NULL;
+            }
+            str = temp;
+        }
+    }
+    str[len] = 0;
+    return str;
+}
+
 void clearConsole(void)
 {
     #if defined(_WIN32)
@@ -64,6 +96,9 @@ void clearConsole(void)
 
     #elif !defined(_WIN32)
     printf("\033[2J\033[H");// if we are'nt in windows use ansi escape codes
+    // SERIOUSLY WHY IS THIS SO QUICK???
+    // WHAT IF A UNIX SYSTEM DOESNT HAVE ANSI
+    // OR IS IT A STANDART
     #endif
 }
 
@@ -97,8 +132,29 @@ int main(void)
 
     while (running)
     {
-        printf("Please select an option:\n\t[1]Add a book\n\t[2]Remove a book \n\t[q]Quit\n");
+        printf("Please select an option:\n\t[1]Add a book\n\t[2]Remove a book\n\t[3]List Books \n\t[q]Quit\n");
         char ch = getch();
+
+        switch (ch)
+        {
+        case '1':
+            char *str = getStr(stdin);
+            AddBook(str);
+            break;
+
+        case '2':
+            break;
+
+        case 'Q':
+        case 'q':
+            printf("Quitting...");
+            return 0;
+            break;
+        
+        default:
+            break;
+        }
+
         clearConsole();       
 
     }
