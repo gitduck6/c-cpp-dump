@@ -45,11 +45,11 @@ char *getStr(FILE* fHandle)
     }
 
     char character;
-    while ( (character = fgetc(fHandle) != '\n') && (character != EOF) )
+    while ( ((character = fgetc(fHandle)) != '\n') && (character != EOF) ) // ookay there was a slight error on this line
     {
         str[len] = character;
         len++;
-        if (size <= len)
+        if (size <= (len + 1)) // just extra safety, the logic here is confusing here, so an extra byte will just be
         {
             size *= 2;
             char *temp = realloc(str,size);
