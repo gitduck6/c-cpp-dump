@@ -104,7 +104,7 @@ void clearConsole(void)
     #endif
 }
 
-typedef struct
+typedef struct Book
 {
     char *title;
 } 
@@ -136,15 +136,57 @@ void lsBooks(void)
     }
 }
 
+void rmBook(int index)
+{
+    if ((index >= libLen) || (index < 0))
+    {
+        fprintf(stderr,"%d is not a valid index (0 - %d)\n",index,libLen);
+        return;
+    }
+
+
+    size_t iterations = libLen - index - 1;
+    for (int i = 0;i < iterations;i++)
+    {
+        library[index + i] = library[index + i + 1];
+    }
+    /*
+        * Okay this part is very confusing but the main idea is like this:
+        * to remove c from abcd0 we need to move d into c's place and 0 into d's place
+        * after experimenting a little i think it takes LEN - index - 1 iterations
+        * which can be seen to be true in the example i gave too
+        * 
+        * To demonstrate:
+            * abcd0 -> len = 5
+            * and lets say we want to remove b, AKA index [1]
+            * we would need to move c->b d->c and 0->d
+            * 3 times, which is the answer we would get in our little "formula"
+            * LEN(5) - INDEX(1) - 1 does infact equal to 3
+        * sure, this method may extremely ineficient, but its all i came up with
+        * so we will use it
+        * NOTE: i used zero based indexing here, if youre counting in a one-indexed way you dont need to subtract 1 
+        * 
+        * also make sure to do libLen--;
+    */
+    libLen--;
+
+}
+
 int main(void)
 {
     char running = 1;
 
     AddBook("The Test Book");
+    AddBook("The Test Book 2");
+    AddBook("The C language");
+    AddBook("idk any other books lmao");
+
+    rmBook(1);
 
     while (running)
     {
         printf("Please select an option:\n");
+        printf("---------------------\n");
         printf("\t[1]Add a book\n");
         printf("\t[2]Remove a book\n");
         printf("\t[3]List Books\n");
@@ -154,22 +196,28 @@ int main(void)
 
         switch (ch)
         {
-        case '1':
+        case '1': // Creating a book
             printf("Please enter the book title:\n");
             char *str = getStr(stdin);
             AddBook(str);
             break;
 
-        case '2':
+        case '2': // Removing a book
+            int toRemove;
+            scanf("%d",&toRemove);
+            rmBook(toRemove);
+            printf("Press the enter to continue...\n");
+            getchar();
+
             break;
 
-        case '3':
+        case '3': // Listing a book
             lsBooks();
             printf("Press the enter to continue...\n");
             getchar();
             
             break;
-        case 'Q':
+        case 'Q': // Quitting
         case 'q':
             printf("Quitting...\n");
             return 0;
