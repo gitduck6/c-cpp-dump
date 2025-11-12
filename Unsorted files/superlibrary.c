@@ -10,6 +10,10 @@
     * probably another "C tradition"
     * 
     * There might be something wrong with my getstr function
+    * 
+    * Also i would really appreciate it if people found actual issues in my code,
+    * and reported it to me on github, would be really nice to see any feedback
+    * (i think anyone can just post issues idk)
     *
 */
 #if defined(_WIN32)
@@ -200,13 +204,17 @@ int main(void)
             printf("Please enter the book title:\n");
             char *str = getStr(stdin);
             AddBook(str);
+
+            printf("Book named \"%s\" added sucessfully.\nPress the enter to continue...\n",str);
+            getchar();
             break;
 
         case '2': // Removing a book
             int toRemove;
+            printf("Please enter the index of a book you want removed (0-indexed)\n");
             scanf("%d",&toRemove);
             rmBook(toRemove);
-            printf("Press the enter to continue...\n");
+            printf("Book number %d removed sucessfully.\n Press the enter to continue...\n",toRemove);
             getchar();
 
             break;
