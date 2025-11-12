@@ -8,6 +8,8 @@
     * Okay i will try to document the windows terminal clearer now,
     * this is actually similar to the termios thing
     * probably another "C tradition"
+    * 
+    * There might be something wrong with my getstr function
     *
 */
 #if defined(_WIN32)
@@ -126,18 +128,34 @@ void AddBook(char * title)
     libLen++;
 }
 
+void lsBooks(void)
+{
+    for (int i = 0;i < libLen;i++)
+    {
+        printf("[%d] %s\n",i,library[i].title);
+    }
+}
+
 int main(void)
 {
     char running = 1;
 
+    AddBook("The Test Book");
+
     while (running)
     {
-        printf("Please select an option:\n\t[1]Add a book\n\t[2]Remove a book\n\t[3]List Books \n\t[q]Quit\n");
+        printf("Please select an option:\n");
+        printf("\t[1]Add a book\n");
+        printf("\t[2]Remove a book\n");
+        printf("\t[3]List Books\n");
+        printf("\t[q]Quit\n");
+
         char ch = getch();
 
         switch (ch)
         {
         case '1':
+            printf("Please enter the book title:\n");
             char *str = getStr(stdin);
             AddBook(str);
             break;
@@ -145,9 +163,15 @@ int main(void)
         case '2':
             break;
 
+        case '3':
+            lsBooks();
+            printf("Press the enter to continue...\n");
+            getchar();
+            
+            break;
         case 'Q':
         case 'q':
-            printf("Quitting...");
+            printf("Quitting...\n");
             return 0;
             break;
         
