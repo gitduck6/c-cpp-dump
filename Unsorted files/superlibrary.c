@@ -176,6 +176,11 @@ void rmBook(int index)
 
 }
 
+Book IndexLookup(int index)
+{
+    return library[index];
+}
+
 int main(void)
 {
     char running = 1;
@@ -194,6 +199,8 @@ int main(void)
         printf("\t[1]Add a book\n");
         printf("\t[2]Remove a book\n");
         printf("\t[3]List Books\n");
+        printf("\t[4]Book lookup\n");
+        printf("\n");
         printf("\t[q]Quit\n");
 
         char ch = getch();
@@ -214,15 +221,27 @@ int main(void)
             printf("Please enter the index of a book you want removed (0-indexed)\n");
             scanf("%d",&toRemove);
             rmBook(toRemove);
-            printf("Book number %d removed sucessfully.\n Press the enter to continue...\n",toRemove);
+            printf("Book number %d removed sucessfully.\nPress the enter to continue...\n",toRemove);
             getchar();
 
             break;
 
-        case '3': // Listing a book
+        case '3': // Listing the books
             lsBooks();
             printf("Press the enter to continue...\n");
             getchar();
+            
+            break;
+        case '4': // Lookup a book
+            int bookIndex;
+            printf("Please enter the index of a book to look up (0-indexed)\n");
+            scanf("%d",&bookIndex);
+            if ((bookIndex >= libLen ) || (bookIndex < 0))
+            {
+                fprintf(stderr,"Book %d does not exist.\n",bookIndex);
+                break;
+            }
+            printf("[%d] %s\n",bookIndex,IndexLookup);
             
             break;
         case 'Q': // Quitting
