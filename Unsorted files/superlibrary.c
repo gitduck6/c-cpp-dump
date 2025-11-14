@@ -181,6 +181,30 @@ Book IndexLookup(int index)
     return library[index];
 }
 
+int *search(char *target)
+{
+    int *indices = NULL;
+    size_t indicesLen = 0;
+
+    for (int i = 0;library[i].title != NULL;i++)
+    {
+        int j;
+        for (j = 0;target[j] != '\0';j++)
+        {
+            if (library[i].title[j] != target[j]) break;
+        }
+        if (target[j] == '\0')
+        {
+            indices = realloc(indices,sizeof(int) * (indicesLen+2)); 
+            indices[indicesLen] = i;
+            indicesLen++;
+        }
+
+    }
+
+    return indices;
+}
+
 int main(void)
 {
     char running = 1;
@@ -199,7 +223,8 @@ int main(void)
         printf("\t[1]Add a book\n");
         printf("\t[2]Remove a book\n");
         printf("\t[3]List Books\n");
-        printf("\t[4]Book lookup\n");
+        printf("\t[4]Index lookup\n");
+        printf("\t[5]Search book\n");
         printf("\n");
         printf("\t[q]Quit\n");
 
@@ -213,6 +238,7 @@ int main(void)
             AddBook(str);
 
             printf("Book named \"%s\" added sucessfully.\nPress the enter to continue...\n",str);
+            free(str);
             getchar();
             break;
 
@@ -235,13 +261,20 @@ int main(void)
         case '4': // Lookup a book
             int bookIndex;
             printf("Please enter the index of a book to look up (0-indexed)\n");
-            scanf("%d",&bookIndex);
+            
+            char *str = getStr(stdin);
+            bookIndex = atoi(str);
+            
             if ((bookIndex >= libLen ) || (bookIndex < 0))
             {
                 fprintf(stderr,"Book %d does not exist.\n",bookIndex);
                 break;
             }
-            printf("[%d] %s\n",bookIndex,IndexLookup);
+            printf("[%d] %s\n",bookIndex,IndexLookup(bookIndex).title);
+
+            free(str);
+            printf("Press the enter to continue...\n");
+            getchar();
             
             break;
         case 'Q': // Quitting
