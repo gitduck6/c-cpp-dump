@@ -196,7 +196,7 @@ int *search(char *target)
         }
         if (target[j] == '\0')
         {
-            if (indicesLen >= size) size *= 2;
+            if ((indicesLen + 1) >= size) size *= 2;
             int * temp = realloc(indices,sizeof(int) * size);
             if (temp == NULL)
             {
@@ -216,6 +216,8 @@ int *search(char *target)
     */
 
     if (indices != NULL) indices[indicesLen] = -1;
+    // to avoid a segfault and writing to NULL(or really close to it
+    // we just check if indices isnt null then write to it
     return indices;
 }
 
