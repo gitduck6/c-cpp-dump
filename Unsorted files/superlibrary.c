@@ -243,7 +243,13 @@ int main(void)
             AddBook(title);
 
             printf("Book named \"%s\" added sucessfully.\nPress the enter to continue...\n",title);
-            free(title);
+            /*
+                * free(title); for some  reason caused errors
+                * OH YEAH i get it, the add book doesnt create its own copy, it quite literally just stores the adress
+                * so freeing the memory makes it keep a pointer to pretty much nothing
+                * 
+                * effectively making a book you'd create into trash
+            */
             getchar();
             break;
 
@@ -312,6 +318,7 @@ int main(void)
         clearConsole();       
 
     }
+    
 
     return 0;
 }
