@@ -201,7 +201,12 @@ int *search(char *target)
         }
 
     }
-
+    /* 
+        * NOTE : only returns strings STARTING with the target
+        * for example corn -> cornfield would work but row -> brown wouldnt
+        * 
+    */
+    indices[indicesLen] = -1;
     return indices;
 }
 
@@ -234,11 +239,11 @@ int main(void)
         {
         case '1': // Creating a book
             printf("Please enter the book title:\n");
-            char *str = getStr(stdin);
-            AddBook(str);
+            char *title = getStr(stdin);
+            AddBook(title);
 
-            printf("Book named \"%s\" added sucessfully.\nPress the enter to continue...\n",str);
-            free(str);
+            printf("Book named \"%s\" added sucessfully.\nPress the enter to continue...\n",title);
+            free(title);
             getchar();
             break;
 
@@ -276,6 +281,23 @@ int main(void)
             printf("Press the enter to continue...\n");
             getchar();
             
+            break;
+        case '5':
+            char *target = NULL;
+            int *indices;
+            printf("Please enter a book title to search for:\n");
+            target = getStr(stdin);
+            indices = search(target);
+
+            for (int i = 0;indices[i] != -1;i++)
+            {
+                printf("[%d] %s\n",indices[i],library[i]);
+            }
+
+            printf("Press the enter to continue...\n");
+            getchar();
+
+            free(indices);
             break;
         case 'Q': // Quitting
         case 'q':
