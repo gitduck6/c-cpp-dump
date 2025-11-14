@@ -51,7 +51,7 @@ char *getStr(FILE* fHandle)
     char character;
     while ( ((character = fgetc(fHandle)) != '\n') && (character != EOF) ) // ookay there was a slight error on this line
     {
-        str[len] = character;
+        str[len] = (char)character;
         len++;
         if (size <= (len + 1)) // just extra safety, the logic here is confusing here, so an extra byte will just be
         {
@@ -185,6 +185,7 @@ int *search(char *target)
 {
     int *indices = NULL;
     size_t indicesLen = 0;
+    size_t size = 8;
 
     for (int i = 0;library[i].title != NULL;i++)
     {
@@ -195,7 +196,14 @@ int *search(char *target)
         }
         if (target[j] == '\0')
         {
-            indices = realloc(indices,sizeof(int) * (indicesLen+2)); 
+            if (indicesLen >= size) size *= 2;
+            int * temp = realloc(indices,sizeof(int) * size);
+            if (temp == NULL)
+            {
+                fprintf(stderr,"Malloc error\n");
+                return NULL;
+            }
+            indices = temp;
             indices[indicesLen] = i;
             indicesLen++;
         }
@@ -206,7 +214,8 @@ int *search(char *target)
         * for example corn -> cornfield would work but row -> brown wouldnt
         * 
     */
-    indices[indicesLen] = -1;
+
+    if (indices != NULL) indices[indicesLen] = -1;
     return indices;
 }
 
@@ -297,12 +306,13 @@ int main(void)
 
             for (int i = 0;indices[i] != -1;i++)
             {
-                printf("[%d] %s\n",indices[i],library[i]);
+                printf("[%d] %s\n",indices[i],library[indices[i]]);
             }
 
             printf("Press the enter to continue...\n");
             getchar();
 
+            free(target);
             free(indices);
             break;
         case 'Q': // Quitting
@@ -319,6 +329,5 @@ int main(void)
 
     }
     
-
     return 0;
 }
