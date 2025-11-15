@@ -14,14 +14,21 @@
     * Also i would really appreciate it if people found actual issues in my code,
     * and reported it to me on github, would be really nice to see any feedback
     * (i think anyone can just post issues idk)
+    * 
+    * the code wouldnt compile in unix because i never tested it for it
+    * but atleast a did add some portability along the way, now this should work
+    * Right now i placed every switch statement into a scope for unix compatability
+    * and fixed the name of termios
+    * 
+    * also checking if indices isnt null
     *
 */
 #if defined(_WIN32)
-#include <conio.h>
-#include <windows.h>
+    #include <conio.h>
+    #include <windows.h>
 #else
-#include <termios>
-#include <unistd.h>
+    #include <termios.h>
+    #include <unistd.h>
 char getch(void)
 {
     // Function copied of the "insinput.c" program
@@ -71,7 +78,7 @@ char *getStr(FILE* fHandle)
 
 void clearConsole(void)
 {
-    #if defined(_WIN32)
+#if defined(_WIN32)
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE); // Get the handle thing so we can work with the terminal
     // OKAY IT WASNT right to use input here
     CONSOLE_SCREEN_BUFFER_INFO csbi; // we will store the info here
@@ -100,12 +107,12 @@ void clearConsole(void)
     // so its kinda confusing for me
     SetConsoleCursorPosition(hConsole, homeCoords);// and finallymoves the cursor back
 
-    #elif !defined(_WIN32)
+#elif !defined(_WIN32)
     printf("\033[2J\033[H");// if we are'nt in windows use ansi escape codes
     // SERIOUSLY WHY IS THIS SO QUICK???
     // WHAT IF A UNIX SYSTEM DOESNT HAVE ANSI
     // OR IS IT A STANDART
-    #endif
+#endif
 }
 
 typedef struct Book
@@ -144,7 +151,7 @@ void rmBook(int index)
 {
     if ((index >= libLen) || (index < 0))
     {
-        fprintf(stderr,"%d is not a valid index (0 - %d)\n",index,libLen);
+        fprintf(stderr,"%d is not a valid index (0 - %d)\n",index,(int)libLen);
         return;
     }
 
@@ -249,6 +256,7 @@ int main(void)
         switch (ch)
         {
         case '1': // Creating a book
+        {
             printf("Please enter the book title:\n");
             char *title = getStr(stdin);
             AddBook(title);
@@ -263,8 +271,9 @@ int main(void)
             */
             getchar();
             break;
-
+        }
         case '2': // Removing a book
+        {
             int toRemove;
             printf("Please enter the index of a book you want removed (0-indexed)\n");
             scanf("%d",&toRemove);
@@ -273,14 +282,17 @@ int main(void)
             getchar();
 
             break;
-
+        }
         case '3': // Listing the books
+        {
             lsBooks();
             printf("Press the enter to continue...\n");
             getchar();
             
             break;
+        }
         case '4': // Lookup a book
+        {
             int bookIndex;
             printf("Please enter the index of a book to look up (0-indexed)\n");
             
@@ -299,16 +311,19 @@ int main(void)
             getchar();
             
             break;
+        }
         case '5':
+        {
             char *target = NULL;
             int *indices;
             printf("Please enter a book title to search for:\n");
             target = getStr(stdin);
             indices = search(target);
 
+            if (indices != NULL)
             for (int i = 0;indices[i] != -1;i++)
             {
-                printf("[%d] %s\n",indices[i],library[indices[i]]);
+                printf("[%d] %s\n",indices[i],library[indices[i]].title);
             }
 
             printf("Press the enter to continue...\n");
@@ -317,12 +332,14 @@ int main(void)
             free(target);
             free(indices);
             break;
+        }
         case 'Q': // Quitting
         case 'q':
+        {
             printf("Quitting...\n");
             return 0;
             break;
-        
+        }
         default:
             break;
         }
