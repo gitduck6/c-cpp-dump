@@ -7,6 +7,8 @@
 
     i feel like my brain is like turned off wth
     this version only works with a single line or the first line
+
+    Okay now i added multiline support, it just needs a dynamic buffer for each line
 */
 
 int main(int argc, char ** argv)
@@ -18,11 +20,13 @@ int main(int argc, char ** argv)
     }
 
     char line[200] = {0};
-    fgets(line,sizeof(line),stdin);
 
-    if (strstr(line,argv[1]) != NULL)
+    while (fgets(line,sizeof(line),stdin) != NULL)
     {
-        printf("%s",line);
+        if (strstr(line,argv[1]) != NULL)
+        {
+            printf("%s",line);
+        }
     }
 
     return 0;
