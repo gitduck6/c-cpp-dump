@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 /*
     * This c program is a fun little utility to evaluate the "compatability" chance of 2 strings,
@@ -16,10 +17,18 @@
     * i should mention that we will use unsigned integers
     * 
     * also i kinda missed day 4 didnt i?
+    * 
+    * ima go with multiplication, since its a little more "chaotic"
+    * i tried multiplication but the values were coming out to be often too high
+    * this seems to be less of an issue with addition
+    * 
+    * idk why im not a mathematician 
 */
 
 int main(void)
 {
+    int compatability;
+
     char person1[32];
     char person2[32];
 
@@ -31,6 +40,10 @@ int main(void)
 
     printf("Please enter the name of the second person!\n");
     fgets(person2,sizeof(person2) - 1,stdin);
+    
+    person1[strcspn(person1,"\n")] = '\0';
+    person2[strcspn(person2,"\n")] = '\0';
+
 
     for (int i = 0;person1[i] != '\0';i++)
     {
@@ -41,6 +54,6 @@ int main(void)
         randn2 += (person2[i] * (1 << i));
     }
     
-    printf("%d %d\n",randn1,randn2);
-
+    compatability = (randn1+randn2) % 100;
+    printf("Compatability between %s and %s is %d%%\n",person1,person2,compatability);
 }
