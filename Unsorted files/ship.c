@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 /*
     * This c program is a fun little utility to evaluate the "compatability" chance of 2 strings,
@@ -25,21 +26,42 @@
     * idk why im not a mathematician 
 */
 
+void readline(char **string,FILE* fp)
+{
+    size_t size = 32;
+    size_t len = 0;
+    (*string) = malloc(size);
+
+    int c;
+
+    while (((c = fgetc(fp)) != EOF) && (c != '\n'))
+    {
+        if ((len + 1) >= size)
+        {
+            size *= 2;
+            (*string) = realloc((*string),size);
+        }
+        (*string)[len] = (char)c;
+        len++;
+    }
+    (*string)[len] = 0;
+}
+
 int main(void)
 {
     int compatability;
 
-    char person1[32];
-    char person2[32];
+    char *person1;
+    char *person2;
 
     unsigned int randn1 = 0;
     unsigned int randn2 = 0;
 
     printf("Please enter the name of the first person!\n");
-    fgets(person1,sizeof(person1) - 1,stdin);
+    readline(&person1,stdin);
 
     printf("Please enter the name of the second person!\n");
-    fgets(person2,sizeof(person2) - 1,stdin);
+    readline(&person2,stdin);
     
     person1[strcspn(person1,"\n")] = '\0';
     person2[strcspn(person2,"\n")] = '\0';
@@ -56,4 +78,8 @@ int main(void)
     
     compatability = (randn1+randn2) % 100;
     printf("Compatability between %s and %s is %d%%\n",person1,person2,compatability);
+
+    free(person1);
+    free(person2);
+    return 0;
 }
