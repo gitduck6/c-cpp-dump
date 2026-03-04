@@ -23,14 +23,23 @@
     * i tried multiplication but the values were coming out to be often too high
     * this seems to be less of an issue with addition
     * 
-    * idk why im not a mathematician 
+    * idk why, cos im not a mathematician 
+    * 
+    * 
+    * HELLO DAY 6, fixed some minor stuff
+    * 
 */
 
-void readline(char **string,FILE* fp)
+char * readline(FILE* fp)
 {
     size_t size = 32;
     size_t len = 0;
-    (*string) = malloc(size);
+    char * string = malloc(size);
+    if (string == NULL)
+    {
+        perror("malloc");
+        return "(NULL)";
+    }
 
     int c;
 
@@ -39,12 +48,20 @@ void readline(char **string,FILE* fp)
         if ((len + 1) >= size)
         {
             size *= 2;
-            (*string) = realloc((*string),size);
+            char * temp = realloc(string,size);
+            if (temp == NULL)
+            {
+                perror("realloc");
+                return "(NULL)";
+            }
+            string = temp;
         }
-        (*string)[len] = (char)c;
+        string[len] = (char)c;
         len++;
     }
-    (*string)[len] = 0;
+    string[len] = '\0';
+
+    return string;
 }
 
 int main(void)
@@ -58,10 +75,10 @@ int main(void)
     unsigned int randn2 = 0;
 
     printf("Please enter the name of the first person!\n");
-    readline(&person1,stdin);
+    person1 = readline(stdin);
 
     printf("Please enter the name of the second person!\n");
-    readline(&person2,stdin);
+    person2 = readline(stdin);
     
     person1[strcspn(person1,"\n")] = '\0';
     person2[strcspn(person2,"\n")] = '\0';
