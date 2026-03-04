@@ -66,7 +66,19 @@ char * readline(FILE* fp)
 
 int main(void)
 {
-    int compatability;
+    char heart[] =
+    "   ##   ##   \n"
+    " ##### ##### \n"
+    " ########### \n"
+    " \\##%3d%%###  \n"
+    "   #######   \n"
+    "    #####     \n"
+    "     ###      \n"
+    "      #       \n"
+
+    ;
+
+    short compatability;
 
     char *person1;
     char *person2;
@@ -94,7 +106,8 @@ int main(void)
     }
     
     compatability = (randn1+randn2) % 100;
-    printf("Compatability between %s and %s is %d%%\n",person1,person2,compatability);
+    printf("Compatability between %s and %s is...\n",person1,person2);
+    printf(heart,compatability);
 
     free(person1);
     free(person2);
