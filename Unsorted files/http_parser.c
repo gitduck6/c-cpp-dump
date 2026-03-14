@@ -6,7 +6,7 @@
     * a poorly made http parser i definitly need to improve
     * for example manage the memory better
     * 
-    *
+    * Okay this works for now but it is VERY unreadable and dangerous
 */
 
 typedef struct
@@ -74,8 +74,48 @@ hRequest initRequest(char *rawRequest)
     
 }
 
-char * getHeader(hRequest hRequest, char * header)
+char * getHeader(hRequest request, char * header)
 {
+    char * headerStart = strstr(request.raw,header);
+    
+    if (headerStart == NULL)
+        return "Header does not exist";
+    
+    headerStart = strstr(headerStart,":") + 1;
+    
+    char * HeaderEnd = strstr(headerStart,"\r\n");
+    if (HeaderEnd < headerStart)
+        return "Header not denoted properly";
+    
+    
+    size_t headerSize = 32;
+    char * headerValue = malloc(headerSize);
+    if (headerValue == NULL)
+    {
+        perror("malloc");
+        return NULL;
+    }
+    
+    int i;
+    for (i = 0;(headerStart + i) < HeaderEnd;i++)
+    {
+        headerValue[i] = headerStart[i];
+        if ((i+1) >= headerSize)
+        {
+            headerSize *= 2;
+            char *temp = realloc(headerValue,headerSize);
+            if (temp == NULL)
+            {
+                perror("malloc");
+                return NULL;
+
+            }
+            headerValue = temp;
+        }
+    }
+    headerValue[i] = '\0';
+        
+    return headerValue;
 
 }
 
@@ -89,8 +129,9 @@ int main(void)
     "Connection: keep-alive\r\n\r\n";
 
     hRequest test = initRequest(req);
+    char * Host = getHeader(test,"Host");
 
-    printf("%s %s\n",test.target,test.method);
+    printf("%s %s %s\n",test.target,test.method,Host);
 
     return 0;
 }
