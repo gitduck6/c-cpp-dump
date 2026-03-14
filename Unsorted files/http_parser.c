@@ -5,6 +5,7 @@
 /*
     * a poorly made http parser i definitly need to improve
     * for example manage the memory better
+    * 
     *
 */
 
@@ -23,27 +24,59 @@ hRequest initRequest(char *rawRequest)
 
     request.raw = rawRequest;
     
-    int i;
-    request.method = malloc(32);
-    request.target = malloc(32);
+    int i,j;
+
+    size_t msize = 32;
+    request.method = malloc(msize);
+
+    size_t tsize = 32;
+    request.target = malloc(tsize);
 
 
-    for (i = 0;(rawRequest[i] != 0) && (rawRequest[i] != ' ');i++)
+    for (i = 0;(rawRequest[i] != '\0') && (rawRequest[i] != ' ');i++)
     {
         request.method[i] = rawRequest[i];
+        if ((i+1) >= msize)
+        {
+            msize *=2;
+            char * temp = realloc(request.method,msize);
+            if (temp == NULL)
+            {
+                perror("malloc");
+                return (hRequest){0};
+
+            }
+            request.method = temp;
+        }
     }
     request.method[i] = '\0';
     i++;
-    int j = i;
+    j = i;
        
     for (;(rawRequest[i] != '\0') && (rawRequest[i] != ' ');i++)
     {
         request.target[i-j] = rawRequest[i];
+        if ((i-j+1) >= tsize)
+        {
+            tsize *=2;
+            char * temp = realloc(request.target,tsize);
+            if (temp == NULL)
+            {
+                perror("malloc");
+                return (hRequest){0};
+            }
+            request.method = temp;
+        }
     }
     request.target[i-j] = '\0';
 
     return request;
     
+}
+
+char * getHeader(hRequest hRequest, char * header)
+{
+
 }
 
 int main(void)
@@ -57,7 +90,7 @@ int main(void)
 
     hRequest test = initRequest(req);
 
-    printf("%s %s",test.target,test.method);
+    printf("%s %s\n",test.target,test.method);
 
     return 0;
 }
