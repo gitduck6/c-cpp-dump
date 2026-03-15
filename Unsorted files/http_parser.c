@@ -79,13 +79,20 @@ char * getHeader(hRequest request, char * header)
     char * headerStart = strstr(request.raw,header);
     
     if (headerStart == NULL)
-        return "Header does not exist";
+    //"Header does not exist";
+    {
+        return NULL;
+    }
+    
     
     headerStart = strstr(headerStart,":") + 1;
     
     char * HeaderEnd = strstr(headerStart,"\r\n");
     if (HeaderEnd < headerStart)
-        return "Header not denoted properly";
+    //"Header not denoted properly";
+    {
+        return NULL;
+    }
     
     
     size_t headerSize = 32;
@@ -106,6 +113,7 @@ char * getHeader(hRequest request, char * header)
             char *temp = realloc(headerValue,headerSize);
             if (temp == NULL)
             {
+                free(headerValue);
                 perror("malloc");
                 return NULL;
 
