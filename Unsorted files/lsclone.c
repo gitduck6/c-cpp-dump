@@ -1,16 +1,23 @@
 #include <stdio.h>
 #include <dirent.h>
 
-int main(void) {
+int main(int argc, char** argv) {
+
+    if (argc != 2)
+    {
+        fprintf(stderr,"usage: %s [directory_name]",argv[0]);
+        return 1;
+    }
+
     DIR *dir; 
     struct dirent *dir_entry; 
 
-    dir = opendir(".");
+    dir = opendir(argv[1]);
 
     if (dir == NULL)
     {
         fprintf(stderr,"Could not open directory");
-        return 1;
+        return 2;
     }
 
     while ((dir_entry = readdir(dir)) != NULL)
