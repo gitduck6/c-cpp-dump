@@ -10,6 +10,14 @@
     * i hope you get what im trying to say
     * 
     * rightnow it works with single characrters just needs the "--all"
+    * ok everything is as i wanted, but theres still so much to expand on
+    * 
+    * Heres the overview of the algorithm:
+    * go through each argument 
+    *   if the argument DOESNT start with a dash skip the whole argument (its not a flag)
+    *   then iterate through the characters of the argument cstring, 
+    *   if this is the second character and the current character is a dash (just like the first one)
+    *   return the part of the string after the dashes IF there is anything after the second dash
     *
 */
 
@@ -31,7 +39,7 @@ int main(int argc,char **argv)
             {
                 if ((argv[i][j] == '-') && (argv[i][j + 1] != '\0'))
                 {
-                    printf("multi-character flag %s is enabled\n",&(argv[i][j+1]));
+                    printf("multi-character flag %s is enabled\n",argv[i] + j + 1);
                     break;
                 }
             }
