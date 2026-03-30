@@ -9,6 +9,7 @@
     * example: "ls --all" this would enable the flag "all" rather than a,l, and l (pretend the l's arent repeating)
     * i hope you get what im trying to say
     * 
+    * rightnow it works with single characrters just needs the "--all"
     *
 */
 
@@ -26,7 +27,13 @@ int main(int argc,char **argv)
         if (argv[i][0] != '-') continue;
         for (int j = 1;argv[i][j] != '\0';j++)
         {
+            if (j == 1)
+            {
+                if ((argv[i][j] == '-') && (argv[i][j + 1] != '\0'))
+                    printf("multi-character flag %s is enabled\n",&(argv[i][j+1]));
+            }
             printf("flag %c is enabled\n",argv[i][j]);
         }
     }
+    return 0;
 }
