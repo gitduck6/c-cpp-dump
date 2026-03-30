@@ -30,9 +30,12 @@ int main(int argc,char **argv)
             if (j == 1)
             {
                 if ((argv[i][j] == '-') && (argv[i][j + 1] != '\0'))
+                {
                     printf("multi-character flag %s is enabled\n",&(argv[i][j+1]));
+                    break;
+                }
             }
-            printf("flag %c is enabled\n",argv[i][j]);
+            printf("single-character flag %c is enabled\n",argv[i][j]);
         }
     }
     return 0;
