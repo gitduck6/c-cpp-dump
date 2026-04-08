@@ -1,8 +1,9 @@
 #include <stdio.h>
+#include <stdlib.h>
 
-char ttt_buffer[4][4] = {"___", "___", "___", (char)0};
+char **game_buffer;
 
-void print_board(char buffer[4][4])
+void print_board(char **buffer)
 {
     for (int i = 0;i < 3;i++)
     {
@@ -37,12 +38,21 @@ void getpos(int *x,int * y)
 
 void setpos(int x, int y, char goal)
 {
-    ttt_buffer[x-1][y-1] = goal;
+    game_buffer[x-1][y-1] = goal;
 
 }
 
 int init_game()
 {
+    //{"___", "___", "___", (char)0}
+    game_buffer = malloc(sizeof(char *) * 4);
+    int i;
+    for (i = 0;i < 3;i++)
+    {
+        game_buffer[i] =  malloc(sizeof(char) * 4);
+        sprintf(game_buffer[i],"___");
+    }
+    game_buffer[i] = NULL;
 
     while (1)
     {
@@ -50,7 +60,7 @@ int init_game()
 
         getpos(&x,&y);
         setpos(x,y,'+');
-        print_board(ttt_buffer);
+        print_board(game_buffer);
         
     }
 }
