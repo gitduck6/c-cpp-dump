@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+char ttt_buffer[4][4] = {"___", "___", "___", (char)0};
+
 void print_board(char buffer[4][4])
 {
     for (int i = 0;i < 3;i++)
@@ -8,21 +10,14 @@ void print_board(char buffer[4][4])
     }
 }
 
-int init_game()
+void getpos(int *x,int * y)
 {
-    char ttt_buffer[4][4] = {"   ", "   ", "   ", (char)0};
-
-
-    while (1)
-    {
-        int x = 0, y = 0;
-
-        while (1) 
+    while (1) 
         {
         printf("Please enter the X position of your move 1-3:\n");
-        scanf("%d",&x);
+        scanf("%d",x);
 
-        if ((x > 3) || (x < 1))
+        if ((*x > 3) || (*x < 1))
             continue;
         else
             break;
@@ -31,15 +26,30 @@ int init_game()
         while (1) 
         {
         printf("Please enter the Y position of your move 1-3:\n");
-        scanf("%d",&y);
+        scanf("%d",y);
 
-        if ((y > 3) || (y < 1))
+        if ((*y > 3) || (*y < 1))
             continue;
         else
             break;
         }
+}
 
-        ttt_buffer[x-1][y-1] = 'x';
+void setpos(int x, int y, char goal)
+{
+    ttt_buffer[x-1][y-1] = goal;
+
+}
+
+int init_game()
+{
+
+    while (1)
+    {
+        int x = 0, y = 0;
+
+        getpos(&x,&y);
+        setpos(x,y,'+');
         print_board(ttt_buffer);
         
     }
