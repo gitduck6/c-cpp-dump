@@ -6,6 +6,9 @@
     * you just do array[] and boom u got a functional array.
     * im not sure if its hard or im just not used to it
     * also i hate how theres no clear distrinction between arrays and pointers(atleast to my mind)
+    * 
+    * Lets make it a little less "hardcoded" our buffer is null terminated in every direction
+    * so lets just take an advantage of those nulls instead of hardcoding a value such as 3
 */
 
 
@@ -13,7 +16,7 @@ char **game_buffer;
 
 void print_board(char **buffer)
 {
-    for (int i = 0;i < 3;i++)
+    for (int i = 0;buffer[i] != NULL;i++)
     {
         printf("%s\n",buffer[i]);
     }
@@ -70,14 +73,20 @@ int init_game()
     }
     game_buffer[i] = NULL;
 
+    char player_symbol = 'x';
     while (1)
     {
         int x = 0, y = 0;
-
+        
         getpos(&x,&y);
-        setpos(x,y,'+');
+        setpos(x,y,player_symbol);
         print_board(game_buffer);
         
+        if (player_symbol == 'x') player_symbol = 'o';
+        else player_symbol = 'x';
+
+        // player_symbol ^= 23;
+
     }
 }
 
