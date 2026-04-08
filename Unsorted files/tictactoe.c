@@ -1,6 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/*
+    * Arrays are usually confusing to work with, i only use them since theyre easy to work with
+    * you just do array[] and boom u got a functional array.
+    * im not sure if its hard or im just not used to it
+    * also i hate how theres no clear distrinction between arrays and pointers(atleast to my mind)
+*/
+
+
 char **game_buffer;
 
 void print_board(char **buffer)
@@ -16,7 +24,11 @@ void getpos(int *x,int * y)
     while (1) 
         {
         printf("Please enter the X position of your move 1-3:\n");
-        scanf("%d",x);
+        while (scanf("%d",x) != 1)
+        {
+            printf("Invalid input.\n");
+            while (getchar() != '\n');
+        }
 
         if ((*x > 3) || (*x < 1))
             continue;
@@ -27,7 +39,11 @@ void getpos(int *x,int * y)
         while (1) 
         {
         printf("Please enter the Y position of your move 1-3:\n");
-        scanf("%d",y);
+        while (scanf("%d",y) != 1)
+        {
+            printf("Invalid input.\n");
+            while (getchar() != '\n');
+        }
 
         if ((*y > 3) || (*y < 1))
             continue;
@@ -38,7 +54,7 @@ void getpos(int *x,int * y)
 
 void setpos(int x, int y, char goal)
 {
-    game_buffer[x-1][y-1] = goal;
+    game_buffer[y-1][x-1] = goal;
 
 }
 
