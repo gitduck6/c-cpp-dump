@@ -25,12 +25,24 @@ char check_win()
 
     for (int i = 0;game_buffer[i] != NULL;i++)
     {
-        char last_char = 0;
+        char first_char = 0;
+        char success = 1;
         for (int j = 0;game_buffer[i][j] != 0;j++)
         {
+            if (j == 0) first_char = game_buffer[i][j];
+            if (game_buffer[i][j] != first_char) 
+            {
+                success = 0;
+                break;
+            }
+        }
 
+        if (success && ((first_char == PLAYER_1) || (first_char == PLAYER_2)))
+        {
+            return first_char;
         }
     }
+    return 0;
 }
 
 void print_board(char **buffer)
@@ -100,6 +112,19 @@ int init_game()
         getpos(&x,&y);
         setpos(x,y,player_symbol);
         print_board(game_buffer);
+
+        char win_char = check_win();
+        if (win_char == PLAYER_1)
+        {
+            printf("Player 1 wins");
+            return 0;
+        }
+        else if (win_char == PLAYER_2)
+        {
+            printf("Player 2 wins");
+            return 0;
+        }
+
         
         if (player_symbol == PLAYER_1) player_symbol = PLAYER_2;
         else player_symbol = PLAYER_1;
