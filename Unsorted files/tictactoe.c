@@ -1,6 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define SIDE_LEN 3
+
+#define PLAYER_1 'x'
+#define PLAYER_2 'o'
+
 /*
     * Arrays are usually confusing to work with, i only use them since theyre easy to work with
     * you just do array[] and boom u got a functional array.
@@ -14,6 +19,20 @@
 
 char **game_buffer;
 
+char check_win()
+{
+    char winner_char = 0;
+
+    for (int i = 0;game_buffer[i] != NULL;i++)
+    {
+        char last_char = 0;
+        for (int j = 0;game_buffer[i][j] != 0;j++)
+        {
+
+        }
+    }
+}
+
 void print_board(char **buffer)
 {
     for (int i = 0;buffer[i] != NULL;i++)
@@ -26,14 +45,14 @@ void getpos(int *x,int * y)
 {
     while (1) 
         {
-        printf("Please enter the X position of your move 1-3:\n");
+        printf("Please enter the X position of your move 1-%d:\n",SIDE_LEN);
         while (scanf("%d",x) != 1)
         {
             printf("Invalid input.\n");
             while (getchar() != '\n');
         }
 
-        if ((*x > 3) || (*x < 1))
+        if ((*x > SIDE_LEN) || (*x < 1))
             continue;
         else
             break;
@@ -48,7 +67,7 @@ void getpos(int *x,int * y)
             while (getchar() != '\n');
         }
 
-        if ((*y > 3) || (*y < 1))
+        if ((*y > SIDE_LEN) || (*y < 1))
             continue;
         else
             break;
@@ -64,16 +83,16 @@ void setpos(int x, int y, char goal)
 int init_game()
 {
     //{"___", "___", "___", (char)0}
-    game_buffer = malloc(sizeof(char *) * 4);
+    game_buffer = malloc(sizeof(char *) * (SIDE_LEN + 1));
     int i;
-    for (i = 0;i < 3;i++)
+    for (i = 0;i < SIDE_LEN;i++)
     {
-        game_buffer[i] =  malloc(sizeof(char) * 4);
+        game_buffer[i] =  malloc(sizeof(char) * (SIDE_LEN + 1));
         sprintf(game_buffer[i],"___");
     }
     game_buffer[i] = NULL;
 
-    char player_symbol = 'x';
+    char player_symbol = PLAYER_1;
     while (1)
     {
         int x = 0, y = 0;
@@ -82,8 +101,8 @@ int init_game()
         setpos(x,y,player_symbol);
         print_board(game_buffer);
         
-        if (player_symbol == 'x') player_symbol = 'o';
-        else player_symbol = 'x';
+        if (player_symbol == PLAYER_1) player_symbol = PLAYER_2;
+        else player_symbol = PLAYER_1;
 
         // player_symbol ^= 23;
 
