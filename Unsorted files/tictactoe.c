@@ -68,6 +68,24 @@ char check_win()
             return first_char;
         }
     }
+    //Check sideways wins
+    char first_char = 0;
+    char success = 1;
+    for (int i = 0;game_buffer[i] != NULL;i++)
+    {
+
+        if (i == 0) first_char = game_buffer[i][i];
+        if (game_buffer[i][i] != first_char) 
+        {
+            success = 0;
+            break;
+        }
+
+    }
+    if (success && ((first_char == PLAYER_1) || (first_char == PLAYER_2)))
+    {
+        return first_char;
+    }
 
     return 0;
 }
