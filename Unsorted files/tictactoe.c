@@ -14,6 +14,11 @@
     * 
     * Lets make it a little less "hardcoded" our buffer is null terminated in every direction
     * so lets just take an advantage of those nulls instead of hardcoding a value such as 3
+    * 
+    * So i added this little confusing checkwin function,
+    * basically checks for any full lines in a 2d array
+    * very confusing to myself also, but it works:)
+    * basically checks horizontals lines, then vertical, i also plan to check sideways stuff also
 */
 
 
@@ -23,6 +28,7 @@ char check_win()
 {
     char winner_char = 0;
 
+    //Check for horizontal wins
     for (int i = 0;game_buffer[i] != NULL;i++)
     {
         char first_char = 0;
@@ -42,6 +48,27 @@ char check_win()
             return first_char;
         }
     }
+    //Check for vertical winz
+    for (int i = 0;game_buffer[0][i] != '\0';i++)
+    {
+        char first_char = 0;
+        char success = 1;
+        for (int j = 0;game_buffer[j] != NULL;j++)
+        {
+            if (j == 0) first_char = game_buffer[j][i];
+            if (game_buffer[j][i] != first_char) 
+            {
+                success = 0;
+                break;
+            }
+        }
+
+        if (success && ((first_char == PLAYER_1) || (first_char == PLAYER_2)))
+        {
+            return first_char;
+        }
+    }
+
     return 0;
 }
 
