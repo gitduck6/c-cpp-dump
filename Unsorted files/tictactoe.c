@@ -131,9 +131,13 @@ void getpos(int *x,int * y)
         }
 }
 
-void setpos(int x, int y, char goal)
+int setpos(int x, int y, char goal)
 {
+    if ((game_buffer[y-1][x-1] == PLAYER_1) || (game_buffer[y-1][x-1] == PLAYER_2)) return 1;
     game_buffer[y-1][x-1] = goal;
+    return 0;
+
+    // 1 if the adress is taken
 
 }
 
@@ -155,7 +159,11 @@ int init_game()
         int x = 0, y = 0;
         
         getpos(&x,&y);
-        setpos(x,y,player_symbol);
+        if (setpos(x,y,player_symbol) == 1)
+        {
+            printf("Square already taken\n");
+            continue;
+        }
         print_board(game_buffer);
 
         char win_char = check_win();
