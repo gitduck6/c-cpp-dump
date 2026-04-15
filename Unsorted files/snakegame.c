@@ -38,6 +38,16 @@ char getch(void)
     return ch;
     // OMG THE  ISSUE WAS JUST THAT I HADNT RETURNED CH WHAT THE HELL
 }
+
+void fix_keyboard()
+{
+    struct termios newattr;
+    tcgetattr(STDIN_FILENO,&newattr);
+    newattr.c_lflag &= ~(ECHO | ICANON);
+    tcsetattr(STDIN_FILENO,TCSANOW,&newattr);
+
+
+}
 #endif
 
 void init_board()
@@ -96,12 +106,21 @@ int get_arrow_key()
 
 int main(void)
 {
-    int x = BOARD_WIDTH / 2, y = BOARD_HEIGHT / 2;
+    fix_keyboard();
 
+    int x = BOARD_WIDTH / 2, y = BOARD_HEIGHT / 2;
     init_board();
+
+    for (;;)
+    {
+        sleep(1);
+        get_arrow_key();
+        print_board();
+
+
+    }
     print_board();
 
-    sleep(4);
     char arrow = get_arrow_key();
     printf("The return value is %d\n",arrow);
     return 0;
