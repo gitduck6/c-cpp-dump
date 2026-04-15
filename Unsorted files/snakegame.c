@@ -9,8 +9,16 @@
     #include <unistd.h>
 #endif
 
-#define BOARD_HEIGHT 16
-#define BOARD_WIDTH 16
+#define BOARD_HEIGHT    16
+#define BOARD_WIDTH     16
+
+#define ARROW_UP    1
+#define ARROW_DOWN  2
+#define ARROW_LEFT  3
+#define ARROW_RIGHT 4
+
+#define ESC_KEY (char)27
+
 
 char **board;
 
@@ -42,7 +50,38 @@ void init_board()
     board[BOARD_HEIGHT] = NULL;
 
 }
+/* 
+    * according to the ansi standart Arrow keys are in the following format: 27 91 65 (example for the UP arrow key)
+    * only the 3rd number varies between arrow keys, from what ive seen here on linux
+    * so im not very sure abt windows for now
+    * 
+    * But that besides the point, we just check if the first 2 characters are 27 and 91 (ESC, [)
+    * and precieve it as an arrow key, then determinte its kind based on the 3rd character 
+    * with switch statements
+    * 'A' for up 'B' for done 'C' for right and 'D' for left
+    * 
+    * so apparently there an be keys in between or something idk
+    * i cant get it to work
+*/
+int get_arrow_key()
+{
+    char key_id;
 
+    if (getch() != ESC_KEY)
+        return 0;
+    if (getch() != '[')
+        return 0;
+    key_id = getch();
+
+    switch (key_id)
+    {
+    case 'A': return ARROW_UP;
+    case 'B': return ARROW_DOWN;
+    case 'C': return ARROW_RIGHT;
+    case 'D': return ARROW_LEFT;
+    }
+    return 0;
+}
 
 int main(void)
 {
@@ -51,5 +90,8 @@ int main(void)
     {
         printf("%s\n",board[i]);
     }
+
+    char arrow = get_arrow_key();
+    printf("The return value is %d\n",arrow);
     return 0;
 }
