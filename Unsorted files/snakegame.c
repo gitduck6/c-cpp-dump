@@ -52,6 +52,15 @@ void init_board()
     board[BOARD_HEIGHT] = NULL;
 
 }
+
+void print_board()
+{
+    for (int i = 0;board[i] != NULL;i++)
+    {
+        printf("%s\n",board[i]);
+    }
+}
+
 /* 
     * according to the ansi standart Arrow keys are in the following format: 27 91 65 (example for the UP arrow key)
     * only the 3rd number varies between arrow keys, from what ive seen here on linux
@@ -87,12 +96,12 @@ int get_arrow_key()
 
 int main(void)
 {
-    init_board();
-    for (int i = 0;board[i] != NULL;i++)
-    {
-        printf("%s\n",board[i]);
-    }
+    int x = BOARD_WIDTH / 2, y = BOARD_HEIGHT / 2;
 
+    init_board();
+    print_board();
+
+    sleep(4);
     char arrow = get_arrow_key();
     printf("The return value is %d\n",arrow);
     return 0;
