@@ -35,6 +35,8 @@ char getch(void)
     ch = getchar();
     tcsetattr(STDIN_FILENO,TCSANOW,&oldattr);
     // i dont wanna re-document this so please check the insinput.c source :)
+    return ch;
+    // OMG THE  ISSUE WAS JUST THAT I HADNT RETURNED CH WHAT THE HELL
 }
 #endif
 
