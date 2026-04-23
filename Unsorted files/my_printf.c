@@ -27,7 +27,7 @@ int my_prinf(const char * format, ...)
 
     for (int i = 0;format[i] != '\0';i++)
     {
-        if (format[i] == '%')
+        if ((!special) && (format[i] == '%'))
         {
             special = 1;
             continue;
@@ -66,6 +66,6 @@ int my_prinf(const char * format, ...)
 
 int main(void)
 {
-    my_prinf("Your char is %c\n",'c');
+    my_prinf("Your char %%is %c\n",'c');
 
 }
