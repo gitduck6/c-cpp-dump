@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <stdarg.h>
 
+#define NIBBLE_BITS      4
+#define INTIGER_BITS     sizeof(int) * 8
+
+
 /*
     * minimal reimplementation of the printf stdio function for fun:
     *
@@ -15,6 +19,14 @@
     * 
     * currently theres only %c and %%, ill try to add hex now
     * 
+    * Hello! today i added hexadecimal format specifiers, but it prints with excessive zeros
+    * example: 00000064 instead of 64, a simple fix for this would be a variable indicating if a
+    * non-zero has appeared up to this point in the iteration while printing those zeros
+    * if this variable is true then print the character, if not (and this is just an excess zero in the start)
+    * then just dont print it!
+    * i hope it made sense i guess :sob:
+    * 
+    * IT WORKS :) lemme add larger hexes tho (%X)
     *
 */
 
@@ -48,11 +60,17 @@ int my_prinf(const char * format, ...)
             case 'x':
                 char *hexboard = "0123456789abcdef";
                 int num = va_arg(va_data,int);
-                for (int i = 28;i >= 0;i-=4)
+                char non_zero_occured = 0;
+                for (int i = (INTIGER_BITS - NIBBLE_BITS);i >= 0;i-=NIBBLE_BITS)
                 {
                     char nibble = (num >> i) & 0xf;
-                    putc(hexboard[nibble],stdout);
-
+                    if ((nibble == 0) && (!non_zero_occured))
+                        continue;
+                    else 
+                    {
+                        non_zero_occured = 1;
+                        putc(hexboard[nibble],stdout);
+                    }
                 }
                 break;
             case '%':
@@ -77,6 +95,6 @@ int my_prinf(const char * format, ...)
 int main(void)
 {
     my_prinf("Your char is %c\n",'c');
-    my_prinf("Your hex is %x",100);
+    my_prinf("Your hex is %x",1600);
 
 }
