@@ -45,6 +45,16 @@ int my_prinf(const char * format, ...)
             case 'c':
                 putc(va_arg(va_data,int),stdout);
                 break;
+            case 'x':
+                char *hexboard = "0123456789abcdef";
+                int num = va_arg(va_data,int);
+                for (int i = 28;i >= 0;i-=4)
+                {
+                    char nibble = (num >> i) & 0xf;
+                    putc(hexboard[nibble],stdout);
+
+                }
+                break;
             case '%':
                 putc('%',stdout);
                 break;
@@ -66,6 +76,7 @@ int my_prinf(const char * format, ...)
 
 int main(void)
 {
-    my_prinf("Your char %%is %c\n",'c');
+    my_prinf("Your char is %c\n",'c');
+    my_prinf("Your hex is %x",100);
 
 }
