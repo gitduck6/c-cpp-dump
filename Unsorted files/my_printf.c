@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdarg.h>
+#include <limits.h>
 
 #define NIBBLE_BITS      4
 #define INTIGER_BITS     sizeof(int) * 8
@@ -27,6 +28,17 @@
     * i hope it made sense i guess :sob:
     * 
     * IT WORKS :) lemme add larger hexes tho (%X)
+    * 
+    * 
+    * ANYWAYS hello again dear reader, today i plan to add decimals
+    * my idea for this is to keep printing the moduluses of the number by large powers of 10 up untill 10^1
+    * despite how confusing my wording was the algorithm is pretty simple, we just have to look for this 
+    * "large power of 10"
+    * my initial idea was to hardcode the closest power of 10 to the intiger limit 
+    * but think of a method to understandably obtain it
+    * so a beter method is to just find the closest power of 10 to the input intiger 
+    * and by closest idk if its the closest larger or closest smaller intiger so ill go with larger just to be sure
+    * too lazy to imagine it 
     *
 */
 
@@ -93,6 +105,26 @@ int my_prinf(const char * format, ...)
                 }
                 break;
             }
+            case 'd':
+                int num = va_arg(va_data,int);
+                if (num < 0)
+                {
+                    putc('-',stdout);
+                    num = -num;
+                }
+                int upper_p10 = 1;
+
+                while ((num / upper_p10) >= 10)
+                    upper_p10 *=10;
+                
+                while (upper_p10 > 0)
+                {
+                    putc((num/upper_p10) + '0',stdout);
+                    num %= upper_p10;
+                    upper_p10 /= 10;
+                }
+
+                break;
 
             case '%':
                 putc('%',stdout);
@@ -118,6 +150,12 @@ int main(void)
     my_prinf("Your char is %c\n",'c');
     my_prinf("Your hex is %x\n",160);
     my_prinf("My hex is %X\n",1600);
+    my_prinf("Your decimal is %d\n",1234);
+    my_prinf("The biggest decimal is %d\n",INT_MAX);
+    my_prinf("The smallest decimal is %d\n",-INT_MAX);
+
+
+
 
 
 }
